@@ -19,8 +19,8 @@ ATTRIBUTES
 RECIPES
 =======
 
-default
--------
+server
+------
 
 Installs the couchbase-server package and starts the couchbase-server service.
 

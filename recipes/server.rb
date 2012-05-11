@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: couchbase
-# Recipe:: default
+# Recipe:: server
 #
 # Copyright 2012, getaroom
 #
@@ -23,3 +23,30 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
+
+case node['platform']
+when "debian", "ubuntu"
+  package_ext = "deb"
+  package_provider = Chef::Provider::Package::Dpkg
+when "redhat", "centos", "scientific", "amazon"
+  package_ext = "rpm"
+  package_provider = Chef::Provider::Package::Rpm
+end
+
+package_machine = node['kernel']['machine'] == "x86_64" ? "x86_64" : "x86"
+package_file = "couchbase-server-#{node['couchbase']['edition']}_#{package_machine}_#{node['couchbase']['version']}.#{package_ext}"
+cached_package_file = "#{Chef::Config[:file_cache_path]}/#{package_file}"
+
+remote_file cached_package_file do
+  source "http://packages.couchbase.com/releases/#{node['couchbase']['version']}/#{package_file}"
+  action :create_if_missing
+end
+
+package cached_package_file do
+  provider package_provider
+end
+
+service "couchbase-server" do
+  supports :restart => true, :status => true
+  action [:enable, :start]
+end

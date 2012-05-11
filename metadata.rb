@@ -9,4 +9,4 @@ version          "1.0.0"
 supports "debian"
 supports "ubuntu"
 
-recipe "couchbase", "Installs Couchbase"
+recipe "couchbase::server", "Installs couchbase-server"
