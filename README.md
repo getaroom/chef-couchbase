@@ -13,6 +13,9 @@ Tested on Ubuntu 12.04.
 ATTRIBUTES
 ==========
 
+* `node['couchbase']['edition']` - The edition of Couchbase to install, "community" or "enterprise"
+* `node['couchbase']['version']` - The version of Couchbase to install
+
 RECIPES
 =======
 
