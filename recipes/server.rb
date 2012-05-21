@@ -50,3 +50,23 @@ service "couchbase-server" do
   supports :restart => true, :status => true
   action [:enable, :start]
 end
+
+directory node['couchbase']['log_dir'] do
+  owner "couchbase"
+  group "couchbase"
+  mode 0755
+  recursive true
+end
+
+ruby_block "rewrite_couchbase_log_dir_config" do
+  log_dir_line = %{{error_logger_mf_dir, "#{node['couchbase']['log_dir']}"}.}
+
+  block do
+    file = Chef::Util::FileEdit.new("/opt/couchbase/etc/couchbase/static_config")
+    file.search_file_replace_line(/error_logger_mf_dir/, log_dir_line)
+    file.write_file
+  end
+
+  notifies :restart, "service[couchbase-server]"
+  not_if "grep '#{log_dir_line}' /opt/couchbase/etc/couchbase/static_config"
+end

@@ -1,5 +1,6 @@
+#
 # Cookbook Name:: couchbase
-# Recipe:: move_logfiles
+# Recipe:: logrotate
 #
 # Copyright 2012, getaroom
 #
@@ -23,13 +24,9 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-log_dir = node["couchbase"]["log_dir"]
-log_path = ::File.join(log_dir, "couchbase", "*.log")
-
 logrotate_app "couchbase-server" do
-  cookbook "logrotate"
-  path log_path
+  path "#{node['couchbase']['log_dir']}/couchbase/*.log"
+  create "644 couchbase couchbase"
   frequency "daily"
   rotate 14
-  create "644 couchbase couchbase"
 end

@@ -15,6 +15,7 @@ ATTRIBUTES
 
 * `node['couchbase']['edition']` - The edition of Couchbase to install, "community" or "enterprise"
 * `node['couchbase']['version']` - The version of Couchbase to install
+* `node['couchbase']['log_dir']` - The directory Couchbase should log to
 
 RECIPES
 =======
@@ -24,10 +25,16 @@ server
 
 Installs the couchbase-server package and starts the couchbase-server service.
 
+logrotate
+---------
+
+Configures log rotation for couchbase-server.
+
 LICENSE AND AUTHOR
 ==================
 
 Author:: Chris Griego (<cgriego@getaroom.com>)
+Author:: Morgan Nelson (<mnelson@getaroom.com>)
 
 Copyright 2012, getaroom
 
