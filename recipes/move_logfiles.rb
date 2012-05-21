@@ -23,16 +23,16 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-log_base = node["couchbase"]["log_base"]
+log_dir = node["couchbase"]["log_dir"]
 
-directory log_base do
+directory log_dir do
   owner "couchbase"
   group "couchbase"
   recursive true
   action :create
 end
 
-line = "{error_logger_mf_dir, \"#{log_base}\"}."
+line = "{error_logger_mf_dir, \"#{log_dir}\"}."
 
 ruby_block "edit_couchbase_logfile_dir" do
   block do
@@ -43,4 +43,3 @@ ruby_block "edit_couchbase_logfile_dir" do
   notifies :restart, "service[couchbase-server]"
   not_if "grep '#{line}' /opt/couchbase/etc/couchbase/static_config"
 end
-

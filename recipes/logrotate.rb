@@ -23,8 +23,8 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-log_base = node["couchbase"]["log_base"]
-log_path = ::File.join(log_base, "couchbase", "*.log")
+log_dir = node["couchbase"]["log_dir"]
+log_path = ::File.join(log_dir, "couchbase", "*.log")
 
 logrotate_app "couchbase-server" do
   cookbook "logrotate"
