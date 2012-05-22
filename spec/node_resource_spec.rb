@@ -12,12 +12,12 @@ describe Chef::Resource::CouchbaseNode do
   describe "#allowed_actions" do
     subject { resource.allowed_actions }
     it { should include :nothing }
-    it { should include :configure }
+    it { should include :update }
   end
 
   describe "#action" do
-    it "defaults to :configure" do
-      resource.action.should == :configure
+    it "defaults to :update" do
+      resource.action.should == :update
     end
   end
 

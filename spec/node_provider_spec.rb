@@ -41,7 +41,7 @@ describe Chef::Provider::CouchbaseNode do
     end
   end
 
-  describe "#action_configure" do
+  describe "#action_update" do
     pending "needs resource"
   end
 end
