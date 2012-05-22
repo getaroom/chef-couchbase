@@ -42,6 +42,68 @@ describe Chef::Provider::CouchbaseNode do
   end
 
   describe "#action_update" do
-    pending "needs resource"
+    before { provider.current_resource = current_resource }
+
+    context "database path does not match" do
+      shared_examples "update couchbase node" do
+        let(:current_resource) { stub(:name => node_name, :database_path => "/opt/couchbase/var/lib/couchbase/data") }
+
+        let :new_resource do
+          stub({
+            :name => node_name,
+            :database_path => "/mnt/couchbase-server/data/#{SecureRandom.hex(8)}",
+            :updated_by_last_action => nil,
+          })
+        end
+
+        let! :node_request do
+          stub_request(:post, "localhost:8091/nodes/#{node_name}/controller/settings").with({
+            :body => hash_including("path" => new_resource.database_path),
+          })
+        end
+
+        it "POSTs to the Management REST API to update the database path" do
+          provider.action_update
+          node_request.should have_been_made.once
+        end
+
+        it "updates the new resource" do
+          new_resource.should_receive(:updated_by_last_action).with(true)
+          provider.action_update
+        end
+      end
+
+      context "addressing the node as self" do
+        let(:node_name) { "self" }
+        include_examples "update couchbase node"
+      end
+
+      context "addressing the node by hostname" do
+        let(:node_name) { "10.0.1.20" }
+        include_examples "update couchbase node"
+      end
+    end
+
+    context "database path matches" do
+      let(:new_resource)     { stub(:name => "self", :database_path => "/opt/couchbase/var/lib/couchbase/data") }
+      let(:current_resource) { stub(:name => "self", :database_path => "/opt/couchbase/var/lib/couchbase/data") }
+
+      before do
+        new_resource.as_null_object
+        stub_request(:post, "localhost:8091/nodes/self/controller/settings").with({
+          :body => hash_including("path" => new_resource.database_path),
+        })
+      end
+
+      it "does not POST to the Management REST API" do
+        provider.action_update
+        a_request(:any, /.*/).should_not have_been_made
+      end
+
+      it "does not update the new resource" do
+        new_resource.should_not_receive(:updated_by_last_action)
+        provider.action_update
+      end
+    end
   end
 end
