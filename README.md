@@ -6,7 +6,8 @@ Installs and configures Couchbase.
 REQUIREMENTS
 ============
 
-## Platform
+Platform
+--------
 
 Tested on Ubuntu 12.04.
 
@@ -15,6 +16,7 @@ ATTRIBUTES
 
 * `node['couchbase']['edition']` - The edition of Couchbase to install, "community" or "enterprise"
 * `node['couchbase']['version']` - The version of Couchbase to install
+* `node['couchbase']['database_path']` - The directory Couchbase should persist data to
 * `node['couchbase']['log_dir']` - The directory Couchbase should log to
 
 RECIPES
@@ -29,6 +31,28 @@ logrotate
 ---------
 
 Configures log rotation for couchbase-server.
+
+RESOURCES/PROVIDERS
+===================
+
+couchbase_node
+--------------
+
+### Actions
+
+* :update - Update the configuration of the node
+
+### Attribute Parameters
+
+* `database_path` - The directory the Couchbase node should persist data to
+
+### Examples
+
+```ruby
+couchbase_node "self" do
+  database_path "/mnt/couchbase-server/data"
+end
+```
 
 LICENSE AND AUTHOR
 ==================

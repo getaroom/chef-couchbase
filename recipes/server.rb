@@ -70,3 +70,7 @@ ruby_block "rewrite_couchbase_log_dir_config" do
   notifies :restart, "service[couchbase-server]"
   not_if "grep '#{log_dir_line}' /opt/couchbase/etc/couchbase/static_config"
 end
+
+couchbase_node "self" do
+  database_path node['couchbase']['database_path']
+end
