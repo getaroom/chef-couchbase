@@ -1,0 +1,9 @@
+HTTP/1.1 400 Bad Request
+Server: Couchbase Server 1.8.0r-55-g80f24f2-community
+Pragma: no-cache
+Date: Tue, 22 May 2012 18:06:26 GMT
+Content-Type: application/json
+Cache-Control: no-cache
+
+
+["Could not set the storage path. It must be a directory writable by 'couchbase' user."]

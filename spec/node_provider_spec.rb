@@ -71,6 +71,11 @@ describe Chef::Provider::CouchbaseNode do
           new_resource.should_receive(:updated_by_last_action).with(true)
           provider.action_update
         end
+
+        it "logs the update" do
+          Chef::Log.should_receive(:info).with(/updated/)
+          provider.action_update
+        end
       end
 
       context "addressing the node as self" do
@@ -104,6 +109,24 @@ describe Chef::Provider::CouchbaseNode do
         new_resource.should_not_receive(:updated_by_last_action)
         provider.action_update
       end
+
+      it "does not log" do
+        Chef::Log.should_not_receive(:info).with(/updated/)
+        provider.action_update
+      end
+    end
+
+    context "Couchbase fails the request" do
+      let(:new_resource)     { stub(:name => "self", :database_path => "/mnt/couchbase-server/data") }
+      let(:current_resource) { stub(:name => "self", :database_path => "/opt/couchbase/var/lib/couchbase/data") }
+
+      let! :node_request do
+        stub_request(:post, "localhost:8091/nodes/self/controller/settings").with({
+          :body => hash_including("path" => new_resource.database_path),
+        }).to_return(fixture("nodes_self_controller_settings_400.http"))
+      end
+
+      it { expect { provider.action_update }.to raise_error(Net::HTTPExceptions) }
     end
   end
 end
