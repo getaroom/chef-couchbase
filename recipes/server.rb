@@ -71,6 +71,13 @@ ruby_block "rewrite_couchbase_log_dir_config" do
   not_if "grep '#{log_dir_line}' /opt/couchbase/etc/couchbase/static_config"
 end
 
+directory node['couchbase']['database_path'] do
+  owner "couchbase"
+  group "couchbase"
+  mode 0755
+  recursive true
+end
+
 couchbase_node "self" do
   database_path node['couchbase']['database_path']
 end
