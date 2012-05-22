@@ -8,6 +8,7 @@ guard "rspec", :cli => "--color --format nested", :version => 2 do
   watch(%r{^spec/.+_spec\.rb$})
   watch("spec/spec_helper.rb") { "spec" }
   watch(%r{^spec/support/(.+)\.rb$}) { "spec" }
+  watch(%r{^spec/fixtures/}) { "spec" }
 end
 
 guard "foodcritic", :cookbook_paths => "." do

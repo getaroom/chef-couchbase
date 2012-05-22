@@ -31,8 +31,8 @@ describe Chef::Resource::CouchbaseNode do
       expect { resource.database_path 42 }.to raise_error Chef::Exceptions::ValidationFailed
     end
 
-    it "defaults to /opt/couchbase/var/lib/couchbase" do
-      resource.database_path.should == "/opt/couchbase/var/lib/couchbase"
+    it "defaults to /opt/couchbase/var/lib/couchbase/data" do
+      resource.database_path.should == "/opt/couchbase/var/lib/couchbase/data"
     end
   end
 
