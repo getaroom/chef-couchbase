@@ -40,7 +40,7 @@ couchbase_node
 
 ### Actions
 
-* :update - Update the configuration of the node
+* :modify - Modify the configuration of the node
 
 ### Attribute Parameters
 

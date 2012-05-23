@@ -41,11 +41,11 @@ describe Chef::Provider::CouchbaseNode do
     end
   end
 
-  describe "#action_update" do
+  describe "#action_modify" do
     before { provider.current_resource = current_resource }
 
     context "database path does not match" do
-      shared_examples "update couchbase node" do
+      shared_examples "modify couchbase node" do
         let(:current_resource) { stub(:name => node_name, :database_path => "/opt/couchbase/var/lib/couchbase/data") }
 
         let :new_resource do
@@ -63,29 +63,29 @@ describe Chef::Provider::CouchbaseNode do
         end
 
         it "POSTs to the Management REST API to update the database path" do
-          provider.action_update
+          provider.action_modify
           node_request.should have_been_made.once
         end
 
         it "updates the new resource" do
           new_resource.should_receive(:updated_by_last_action).with(true)
-          provider.action_update
+          provider.action_modify
         end
 
-        it "logs the update" do
-          Chef::Log.should_receive(:info).with(/updated/)
-          provider.action_update
+        it "logs the modification" do
+          Chef::Log.should_receive(:info).with(/modified/)
+          provider.action_modify
         end
       end
 
       context "addressing the node as self" do
         let(:node_name) { "self" }
-        include_examples "update couchbase node"
+        include_examples "modify couchbase node"
       end
 
       context "addressing the node by hostname" do
         let(:node_name) { "10.0.1.20" }
-        include_examples "update couchbase node"
+        include_examples "modify couchbase node"
       end
     end
 
@@ -101,18 +101,18 @@ describe Chef::Provider::CouchbaseNode do
       end
 
       it "does not POST to the Management REST API" do
-        provider.action_update
+        provider.action_modify
         a_request(:any, /.*/).should_not have_been_made
       end
 
       it "does not update the new resource" do
         new_resource.should_not_receive(:updated_by_last_action)
-        provider.action_update
+        provider.action_modify
       end
 
       it "does not log" do
-        Chef::Log.should_not_receive(:info).with(/updated/)
-        provider.action_update
+        Chef::Log.should_not_receive(:info).with(/modified/)
+        provider.action_modify
       end
     end
 
@@ -126,7 +126,7 @@ describe Chef::Provider::CouchbaseNode do
         }).to_return(fixture("nodes_self_controller_settings_400.http"))
       end
 
-      it { expect { provider.action_update }.to raise_error(Net::HTTPExceptions) }
+      it { expect { provider.action_modify }.to raise_error(Net::HTTPExceptions) }
     end
   end
 end

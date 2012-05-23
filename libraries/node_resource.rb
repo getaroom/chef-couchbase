@@ -7,8 +7,8 @@ class Chef
 
       def initialize(name, run_context=nil)
         super
-        @action = :update
-        @allowed_actions.push(:update)
+        @action = :modify
+        @allowed_actions.push(:modify)
         @provider = Provider::CouchbaseNode
         @resource_name = :couchbase_node
       end
