@@ -9,16 +9,16 @@ describe Chef::Resource::CouchbaseNode do
     it { described_class.ancestors.should include Chef::Resource }
   end
 
-  describe "#allowed_actions" do
-    subject { resource.allowed_actions }
-    it { should include :nothing }
-    it { should include :modify }
-  end
-
   describe "#action" do
     it "defaults to :modify" do
       resource.action.should == :modify
     end
+  end
+
+  describe "#allowed_actions" do
+    subject { resource.allowed_actions }
+    it { should include :nothing }
+    it { should include :modify }
   end
 
   describe "#database_path" do
@@ -39,6 +39,21 @@ describe Chef::Resource::CouchbaseNode do
   describe "#name" do
     it "assigns the given name attribute" do
       described_class.new("self").name.should == "self"
+    end
+  end
+
+  describe "#id" do
+    it "can be assigned" do
+      resource.id "10.0.1.20"
+      resource.id.should == "10.0.1.20"
+    end
+
+    it "cannot be assigned an Integer" do
+      expect { resource.id 42 }.to raise_error Chef::Exceptions::ValidationFailed
+    end
+
+    it "defaults to the name attribute" do
+      resource.id.should == resource.name
     end
   end
 

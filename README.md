@@ -44,6 +44,7 @@ couchbase_node
 
 ### Attribute Parameters
 
+* `id` - The id of the Couchbase node, defaults to "self"
 * `database_path` - The directory the Couchbase node should persist data to
 
 ### Examples
