@@ -1,10 +1,12 @@
 source "https://rubygems.org"
 
-gem "chef", "~> 0.10.8"
+gem "chef", "~> 0.10.10"
 gem "foodcritic"
+gem "knife-ec2"
 gem "librarian"
 gem "rake"
 gem "rspec"
+gem "spiceweasel"
 gem "webmock"
 
 group :development do
