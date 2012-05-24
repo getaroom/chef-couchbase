@@ -121,13 +121,6 @@ describe Chef::Provider::CouchbaseNode do
         })
       end
 
-      before do
-        new_resource.as_null_object
-        stub_request(:post, "localhost:8091/nodes/self/controller/settings").with({
-          :body => hash_including("path" => new_resource.database_path),
-        })
-      end
-
       it "does not POST to the Management REST API" do
         provider.action_modify
         a_request(:any, /.*/).should_not have_been_made

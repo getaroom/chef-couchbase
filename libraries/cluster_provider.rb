@@ -16,6 +16,15 @@ class Chef
         end
       end
 
+      def action_create_if_missing
+        unless @cluster_exists
+          uri = URI("http://localhost:8091/pools/#{@new_resource.id}")
+          Net::HTTP.post_form(uri, "memoryQuota" => @new_resource.memory_quota_mb).value
+          @new_resource.updated_by_last_action true
+          Chef::Log.info("#{@new_resource} created")
+        end
+      end
+
       private
 
       def pool_memory_quota_mb
