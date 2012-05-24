@@ -14,10 +14,12 @@ Tested on Ubuntu 12.04.
 ATTRIBUTES
 ==========
 
-* `node['couchbase']['edition']` - The edition of Couchbase to install, "community" or "enterprise"
-* `node['couchbase']['version']` - The version of Couchbase to install
-* `node['couchbase']['database_path']` - The directory Couchbase should persist data to
-* `node['couchbase']['log_dir']` - The directory Couchbase should log to
+* `node['couchbase']['edition']`         - The edition of Couchbase to install, "community" or "enterprise"
+* `node['couchbase']['version']`         - The version of Couchbase to install
+* `node['couchbase']['database_path']`   - The directory Couchbase should persist data to
+* `node['couchbase']['log_dir']`         - The directory Couchbase should log to
+* `node['couchbase']['memory_quota_mb']` - The per server RAM quota for the entire cluster in megabytes
+                                           defaults to 80% of node's total RAM
 
 RECIPES
 =======
@@ -40,11 +42,11 @@ couchbase_node
 
 ### Actions
 
-* :modify - Modify the configuration of the node
+* :modify - **Default** Modify the configuration of the node
 
 ### Attribute Parameters
 
-* `id` - The id of the Couchbase node, defaults to "self"
+* `id` - The id of the Couchbase node, typically "self"
 * `database_path` - The directory the Couchbase node should persist data to
 
 ### Examples
@@ -52,6 +54,26 @@ couchbase_node
 ```ruby
 couchbase_node "self" do
   database_path "/mnt/couchbase-server/data"
+end
+```
+
+couchbase_cluster
+-----------------
+
+### Actions
+
+* :create_if_missing - **Default** Create a cluster/pool only if it doesn't exist yet
+
+### Attribute Parameters
+
+* `id` - The id of the Couchbase cluster, typically "default"
+* `memory_quota_mb` - The per server RAM quota for the entire cluster in megabytes
+
+### Examples
+
+```ruby
+couchbase_cluster "default" do
+  memory_quota_mb 256
 end
 ```
 

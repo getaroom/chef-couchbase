@@ -1,0 +1,9 @@
+HTTP/1.1 400 Bad Request
+Server: Couchbase Server 1.8.0r-55-g80f24f2-community
+Pragma: no-cache
+Date: Thu, 24 May 2012 20:57:05 GMT
+Content-Type: application/json
+Content-Length: 99
+Cache-Control: no-cache
+
+["The RAM Quota value is too large. Quota must be between 256 MB and 796 MB (80% of memory size)."]
