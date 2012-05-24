@@ -1,0 +1,9 @@
+HTTP/1.1 404 Object Not Found
+Server: Couchbase Server 1.8.0r-55-g80f24f2-community
+Pragma: no-cache
+Date: Thu, 24 May 2012 17:29:23 GMT
+Content-Type: application/json
+Content-Length: 14
+Cache-Control: no-cache
+
+"unknown pool"
