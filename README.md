@@ -23,6 +23,8 @@ ATTRIBUTES
 * `node['couchbase']['log_dir']`         - The directory Couchbase should log to
 * `node['couchbase']['memory_quota_mb']` - The per server RAM quota for the entire cluster in megabytes
                                            defaults to Couchbase's maximum allowed value
+* `node['couchbase']['username']`        - The cluster's username for the REST API and Admin UI
+* `node['couchbase']['password']`        - The cluster's password for the REST API and Admin UI
 
 RECIPES
 =======
@@ -77,6 +79,34 @@ couchbase_cluster
 ```ruby
 couchbase_cluster "default" do
   memory_quota_mb 256
+end
+```
+
+couchbase_settings
+------------------
+
+### Actions
+
+* `:modify` - **Default** Modify the collection of settings
+
+### Attribute Parameters
+
+* `username` - The username to use to authenticate with Couchbase
+* `password` - The password to use to authenticate with Couchbase
+* `group` - Which group of settings to modify
+* `settings` - The hash of settings to modify
+
+### Examples
+
+```ruby
+couchbase_settings "autoFailover" do
+  username "Administrator"
+  password "password"
+
+  settings({
+    "enabled" => true,
+    "timeout" => 30,
+  })
 end
 ```
 

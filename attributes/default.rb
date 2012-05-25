@@ -17,4 +17,7 @@ default['couchbase']['package_full_url'] = "#{node['couchbase']['package_base_ur
 default['couchbase']['database_path'] = "/opt/couchbase/var/lib/couchbase/data"
 default['couchbase']['log_dir'] = "/opt/couchbase/var/lib/couchbase/logs"
 
+default['couchbase']['username'] = "Administrator"
+default['couchbase']['password'] = ""
+
 default['couchbase']['memory_quota_mb'] = CouchbaseMaxMemoryQuotaCalculator.from_node(node).in_megabytes
