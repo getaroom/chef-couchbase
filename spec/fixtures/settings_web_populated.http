@@ -1,0 +1,8 @@
+HTTP/1.1 200 OK
+Server: Couchbase Server 1.8.0r_74_g85f643d-community
+Pragma: no-cache
+Date: Fri, 25 May 2012 17:02:06 GMT
+Content-Type: application/json
+Cache-Control: no-cache
+
+{"port":8091,"username":"Administrator","password":"password"}

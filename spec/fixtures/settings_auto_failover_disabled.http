@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+Server: Couchbase Server 1.8.0r_74_g85f643d-community
+Pragma: no-cache
+Date: Fri, 25 May 2012 17:27:56 GMT
+Content-Type: application/json
+Content-Length: 40
+Cache-Control: no-cache
+
+{"enabled":false,"timeout":30,"count":0}
