@@ -24,26 +24,16 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-case node['platform']
-when "debian", "ubuntu"
-  package_ext = "deb"
-  package_provider = Chef::Provider::Package::Dpkg
-when "redhat", "centos", "scientific", "amazon"
-  package_ext = "rpm"
-  package_provider = Chef::Provider::Package::Rpm
-end
-
-package_machine = node['kernel']['machine'] == "x86_64" ? "x86_64" : "x86"
-package_file = "couchbase-server-#{node['couchbase']['edition']}_#{package_machine}_#{node['couchbase']['version']}.#{package_ext}"
-cached_package_file = "#{Chef::Config[:file_cache_path]}/#{package_file}"
-
-remote_file cached_package_file do
-  source "http://packages.couchbase.com/releases/#{node['couchbase']['version']}/#{package_file}"
+remote_file File.join(Chef::Config[:file_cache_path], node['couchbase']['package_file']) do
+  source node['couchbase']['package_full_url']
   action :create_if_missing
 end
 
-package cached_package_file do
-  provider package_provider
+package File.join(Chef::Config[:file_cache_path], node['couchbase']['package_file']) do
+  provider value_for_platform({
+    %w(debian ubuntu) => { :default => Chef::Provider::Package::Dpkg },
+    %w(redhat centos scientific amazon") => { :default => Chef::Provider::Package::Rpm },
+  })
 end
 
 service "couchbase-server" do
@@ -80,6 +70,17 @@ end
 
 couchbase_node "self" do
   database_path node['couchbase']['database_path']
+end
+
+couchbase_settings "web" do
+  settings({
+    "username" => node['couchbase']['username'],
+    "password" => node['couchbase']['password'],
+    "port" => 8091,
+  })
+
+  username node['couchbase']['username']
+  password node['couchbase']['password']
 end
 
 couchbase_cluster "default" do

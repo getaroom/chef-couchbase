@@ -32,10 +32,9 @@ class Chef
       end
 
       def pool_data
-        return @node_data if instance_variable_defined? "@node_data"
+        return @pool_data if instance_variable_defined? "@pool_data"
 
-        @node_data ||= begin
-          uri = URI("http://localhost:8091/pools/#{@new_resource.id}")
+        @pool_data ||= begin
           response = Net::HTTP.get_response("localhost", "/pools/#{@new_resource.id}", 8091)
           JSONCompat.from_json response.body if response.kind_of?(Net::HTTPSuccess)
         end

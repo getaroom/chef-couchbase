@@ -1,5 +1,4 @@
 require "spec_helper"
-require "node_provider"
 require "node_resource"
 
 describe Chef::Resource::CouchbaseNode do
@@ -48,18 +47,6 @@ describe Chef::Resource::CouchbaseNode do
 
     it "defaults to /opt/couchbase/var/lib/couchbase/data" do
       resource.database_path.should == "/opt/couchbase/var/lib/couchbase/data"
-    end
-  end
-
-  describe "#name" do
-    it "assigns the given name attribute" do
-      described_class.new("self").name.should == "self"
-    end
-  end
-
-  describe "#provider" do
-    it "defaults to the CouchbaseNode provider class" do
-      resource.provider.should == Chef::Provider::CouchbaseNode
     end
   end
 

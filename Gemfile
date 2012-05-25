@@ -1,5 +1,6 @@
 source "https://rubygems.org"
 
+gem "activesupport"
 gem "chef", "~> 0.10.10"
 gem "foodcritic"
 gem "knife-ec2"

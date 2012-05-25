@@ -1,6 +1,5 @@
 require "spec_helper"
 require "cluster_resource"
-require "cluster_provider"
 
 describe Chef::Resource::CouchbaseCluster do
   let(:resource) { described_class.new("default") }
@@ -65,18 +64,6 @@ describe Chef::Resource::CouchbaseCluster do
 
     it "is required" do
       expect { resource.memory_quota_mb }.to raise_error Chef::Exceptions::ValidationFailed
-    end
-  end
-
-  describe "#name" do
-    it "assigns the given name attribute" do
-      described_class.new("default").name.should == "default"
-    end
-  end
-
-  describe "#provider" do
-    it "defaults to the CouchbaseCluster provider class" do
-      resource.provider.should == Chef::Provider::CouchbaseCluster
     end
   end
 

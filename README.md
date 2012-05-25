@@ -16,10 +16,15 @@ ATTRIBUTES
 
 * `node['couchbase']['edition']`         - The edition of Couchbase to install, "community" or "enterprise"
 * `node['couchbase']['version']`         - The version of Couchbase to install
+* `node['couchbase']['package_file]`     - The package file to download and install
+* `node['couchbase']['package_base_url]` - The url path to download the package file from
+* `node['couchbase']['package_full_url]` - The full url to the package file to download and install
 * `node['couchbase']['database_path']`   - The directory Couchbase should persist data to
 * `node['couchbase']['log_dir']`         - The directory Couchbase should log to
 * `node['couchbase']['memory_quota_mb']` - The per server RAM quota for the entire cluster in megabytes
-                                           defaults to 80% of node's total RAM
+                                           defaults to Couchbase's maximum allowed value
+* `node['couchbase']['username']`        - The cluster's username for the REST API and Admin UI
+* `node['couchbase']['password']`        - The cluster's password for the REST API and Admin UI
 
 RECIPES
 =======
@@ -42,7 +47,7 @@ couchbase_node
 
 ### Actions
 
-* :modify - **Default** Modify the configuration of the node
+* `:modify` - **Default** Modify the configuration of the node
 
 ### Attribute Parameters
 
@@ -62,7 +67,7 @@ couchbase_cluster
 
 ### Actions
 
-* :create_if_missing - **Default** Create a cluster/pool only if it doesn't exist yet
+* `:create_if_missing` - **Default** Create a cluster/pool only if it doesn't exist yet
 
 ### Attribute Parameters
 
@@ -74,6 +79,34 @@ couchbase_cluster
 ```ruby
 couchbase_cluster "default" do
   memory_quota_mb 256
+end
+```
+
+couchbase_settings
+------------------
+
+### Actions
+
+* `:modify` - **Default** Modify the collection of settings
+
+### Attribute Parameters
+
+* `username` - The username to use to authenticate with Couchbase
+* `password` - The password to use to authenticate with Couchbase
+* `group` - Which group of settings to modify
+* `settings` - The hash of settings to modify
+
+### Examples
+
+```ruby
+couchbase_settings "autoFailover" do
+  username "Administrator"
+  password "password"
+
+  settings({
+    "enabled" => true,
+    "timeout" => 30,
+  })
 end
 ```
 

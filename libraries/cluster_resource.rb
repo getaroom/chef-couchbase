@@ -8,11 +8,10 @@ class Chef
         "must be at least 256" => lambda { |quota| quota >= 256 }
       }
 
-      def initialize(name, run_context=nil)
+      def initialize(*)
         super
         @action = :create_if_missing
         @allowed_actions.push :create_if_missing
-        @provider = Provider::CouchbaseCluster
         @resource_name = :couchbase_cluster
       end
     end
