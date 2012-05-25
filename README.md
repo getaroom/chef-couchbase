@@ -19,7 +19,7 @@ ATTRIBUTES
 * `node['couchbase']['database_path']`   - The directory Couchbase should persist data to
 * `node['couchbase']['log_dir']`         - The directory Couchbase should log to
 * `node['couchbase']['memory_quota_mb']` - The per server RAM quota for the entire cluster in megabytes
-                                           defaults to 80% of node's total RAM
+                                           defaults to Couchbase's maximum allowed value
 
 RECIPES
 =======
@@ -42,7 +42,7 @@ couchbase_node
 
 ### Actions
 
-* :modify - **Default** Modify the configuration of the node
+* `:modify` - **Default** Modify the configuration of the node
 
 ### Attribute Parameters
 
@@ -62,7 +62,7 @@ couchbase_cluster
 
 ### Actions
 
-* :create_if_missing - **Default** Create a cluster/pool only if it doesn't exist yet
+* `:create_if_missing` - **Default** Create a cluster/pool only if it doesn't exist yet
 
 ### Attribute Parameters
 
