@@ -1,5 +1,6 @@
 source "https://rubygems.org"
 
+gem "activesupport"
 gem "chef", "~> 0.10.8"
 gem "foodcritic"
 gem "growl"
