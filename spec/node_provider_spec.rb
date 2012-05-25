@@ -121,20 +121,8 @@ describe Chef::Provider::CouchbaseNode do
         })
       end
 
-      it "does not POST to the Management REST API" do
-        provider.action_modify
-        a_request(:any, /.*/).should_not have_been_made
-      end
-
-      it "does not update the new resource" do
-        new_resource.should_not_receive(:updated_by_last_action)
-        provider.action_modify
-      end
-
-      it "does not log" do
-        Chef::Log.should_not_receive(:info).with(/modified/)
-        provider.action_modify
-      end
+      subject { provider.action_modify }
+      it_should_behave_like "a no op provider action"
     end
 
     context "Couchbase fails the request" do

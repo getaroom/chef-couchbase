@@ -119,21 +119,8 @@ describe Chef::Provider::CouchbaseCluster do
     context "cluster exists but quotas don't match" do
       let(:cluster_exists) { true }
       let(:memory_quota_mb) { new_resource.memory_quota_mb * 2 }
-
-      it "does not POST to the Management REST API" do
-        provider.action_create_if_missing
-        a_request(:any, /.*/).should_not have_been_made
-      end
-
-      it "does not update the new resource" do
-        new_resource.should_not_receive(:updated_by_last_action)
-        provider.action_create_if_missing
-      end
-
-      it "does not log" do
-        Chef::Log.should_not_receive(:info).with(/created/)
-        provider.action_create_if_missing
-      end
+      subject { provider.action_create_if_missing }
+      it_should_behave_like "a no op provider action"
     end
   end
 end
