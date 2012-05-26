@@ -171,6 +171,11 @@ describe Chef::Provider::CouchbaseSettings do
         end
 
         it { expect { provider.action_modify }.to raise_error(Net::HTTPExceptions) }
+
+        it "logs the error" do
+          Chef::Log.should_receive(:error).with(%{The value of "sendStats" must be true or false.})
+          provider.action_modify rescue nil
+        end
       end
 
       context "cannot contact the Couchbase server" do
