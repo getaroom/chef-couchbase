@@ -3,7 +3,10 @@ cookbooks:
 - couchbase:
 - minitest-handler:
 
+roles:
+- server:
+
 nodes:
 - ec2 1:
-  - recipe[couchbase::server] recipe[minitest-handler]
+  - role[server]
   - --no-host-key-verify -x ubuntu -G default -I ami-3c994355 -f c1.medium -d ubuntu12.04-gems --region us-east-1
