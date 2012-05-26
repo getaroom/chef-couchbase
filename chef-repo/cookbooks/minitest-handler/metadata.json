@@ -1,0 +1,29 @@
+{
+  "name": "minitest-handler",
+  "description": "Installs and configures minitest-chef-handler",
+  "long_description": "Cookbook: minitest-handler  \nAuthor: Bryan McLellan <btm@loftninjas.org>  \nCopyright: 2012 Opscode, Inc.  \nLicense: Apache 2.0  \n\nDescription\n===========\n\nThis cookbook utilizes the minitest-chef-handler project to facilitate cookbook testing.\n\nminitest-chef-handler project: https://github.com/calavera/minitest-chef-handler  \nstable minitest-handler cookbook: http://community.opscode.com/cookbook/minitest-handler  \nminitest-handler cookbook development: https://github.com/btm/minitest-handler-cookbook  \n\nAttributes\n==========\n\nnode[:minitest][:path] - Location to store and find tests\n\nUsage\n=====\n\n* The node run list should begin with 'recipe[chef-minitest]'\n* Each cookbook should contain tests in the 'files/default/tests/minitest' directory with a file suffix of '_test.rb'\n\nMinitest: https://github.com/seattlerb/minitest\n\nExample\n=====\n\n    class TestApache2 < MiniTest::Chef::TestCase\n      def test_that_the_package_installed\n        case node[:platform]\n        when \"ubuntu\",\"debian\"\n          assert system('apt-cache policy apache2 | grep Installed | grep -v none')\n        end\n      end\n    \n      def test_that_the_service_is_running\n        assert system('/etc/init.d/apache2 status')\n      end\n    \n      def test_that_the_service_is_enabled\n        assert File.exists?(Dir.glob(\"/etc/rc5.d/S*apache2\").first)\n      end\n    end\n\nChangelog\n=====\n\n### v0.0.5 \n\n* Install the minitest-chef-handler gem instead of downloading from github directly\n* Remove tests from cookbooks no longer in the run list\n\n### v0.0.4\n\nAdd examples/ top level directory (may not work)\n",
+  "maintainer": "Bryan McLellan",
+  "maintainer_email": "btm@loftinjas.org",
+  "license": "Apache 2.0",
+  "platforms": {
+  },
+  "dependencies": {
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+  },
+  "version": "0.0.5"
+}

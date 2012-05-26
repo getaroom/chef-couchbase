@@ -1,4 +1,3 @@
-require 'librarian/chef/integration/knife'
 current_dir = File.dirname(__FILE__)
 
 ENV['OPSCODE_USER'] ||= ENV['USER']
@@ -12,7 +11,7 @@ validation_key "#{ENV['HOME']}/.chef/#{ENV['ORGNAME']}-validator.pem"
 chef_server_url "https://api.opscode.com/organizations/#{ENV['ORGNAME']}"
 cache_type 'BasicFile'
 cache_options :path => "#{ENV['HOME']}/.chef/checksums"
-cookbook_path [Librarian::Chef.install_path, File.expand_path("../../../..", __FILE__)]
+cookbook_path ["#{current_dir}/../cookbooks"]
 
 knife[:aws_access_key_id] = ENV['AWS_ACCESS_KEY_ID']
 knife[:aws_secret_access_key] = ENV['AWS_SECRET_ACCESS_KEY']
