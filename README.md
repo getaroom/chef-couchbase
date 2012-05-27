@@ -51,6 +51,8 @@ couchbase_node
 
 ### Attribute Parameters
 
+* `username` - The username to use to authenticate with Couchbase
+* `password` - The password to use to authenticate with Couchbase
 * `id` - The id of the Couchbase node, typically "self"
 * `database_path` - The directory the Couchbase node should persist data to
 
@@ -58,6 +60,9 @@ couchbase_node
 
 ```ruby
 couchbase_node "self" do
+  username "Administrator"
+  password "password"
+
   database_path "/mnt/couchbase-server/data"
 end
 ```

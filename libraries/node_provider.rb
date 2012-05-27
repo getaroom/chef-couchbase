@@ -1,9 +1,12 @@
 require "chef/provider"
 require "net/http"
+require File.join(File.dirname(__FILE__), "client")
 
 class Chef
   class Provider
     class CouchbaseNode < Provider
+      include Couchbase::Client
+
       def load_current_resource
         @current_resource = Chef::Resource::CouchbaseNode.new(@new_resource.name)
         @current_resource.id @new_resource.id
@@ -12,8 +15,7 @@ class Chef
 
       def action_modify
         if @current_resource.database_path != @new_resource.database_path
-          uri = URI("http://localhost:8091/nodes/#{@new_resource.id}/controller/settings")
-          Net::HTTP.post_form(uri, "path" => @new_resource.database_path).value
+          post "/nodes/#{@new_resource.id}/controller/settings", "path" => @new_resource.database_path
           @new_resource.updated_by_last_action(true)
           Chef::Log.info "#{@new_resource} modified"
         end
@@ -22,7 +24,12 @@ class Chef
       private
 
       def node_data
-        @node_data ||= JSONCompat.from_json Net::HTTP.get("localhost", "/nodes/#{@new_resource.id}", 8091)
+        @node_data ||= begin
+          response = get "/nodes/#{@new_resource.id}"
+          Chef::Log.error response.body unless response.kind_of?(Net::HTTPSuccess) || response.body.empty?
+          response.value
+          JSONCompat.from_json response.body
+        end
       end
     end
   end

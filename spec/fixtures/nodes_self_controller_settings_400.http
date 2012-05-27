@@ -5,5 +5,4 @@ Date: Tue, 22 May 2012 18:06:26 GMT
 Content-Type: application/json
 Cache-Control: no-cache
 
-
 ["Could not set the storage path. It must be a directory writable by 'couchbase' user."]

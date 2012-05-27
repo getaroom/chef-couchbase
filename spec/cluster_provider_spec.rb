@@ -112,11 +112,17 @@ describe Chef::Provider::CouchbaseCluster do
     context "Couchbase fails the request" do
       let(:cluster_exists) { false }
 
-      let! :cluster_request do
+      before do
+        Chef::Log.stub(:error)
         stub_request(:post, "#{base_uri}/pools/default").to_return(fixture("pools_default_400.http"))
       end
 
       it { expect { provider.action_create_if_missing }.to raise_error(Net::HTTPExceptions) }
+
+      it "logs the error" do
+        Chef::Log.should_receive(:error).with(%{["The RAM Quota value is too large. Quota must be between 256 MB and 796 MB (80% of memory size)."]})
+        provider.action_create_if_missing rescue nil
+      end
     end
 
     context "cluster exists but quotas don't match" do

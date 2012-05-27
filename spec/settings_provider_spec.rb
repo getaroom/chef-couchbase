@@ -83,24 +83,30 @@ describe Chef::Provider::CouchbaseSettings do
   describe "#load_current_resource" do
     context "request fails due to invalid credentials" do
       let(:group) { "web" }
-
-      before do
-        stub_request(:get, "#{base_uri}/settings/web").
-        to_return(fixture("settings_web_401.http"))
-      end
+      before { stub_request(:get, "#{base_uri}/settings/web").to_return(fixture("settings_web_401.http")) }
 
       it { expect { provider.load_current_resource }.to raise_error(Net::HTTPExceptions) }
+
+      it "does not log the empty error" do
+        Chef::Log.should_not_receive(:error)
+        provider.load_current_resource rescue nil
+      end
     end
 
     context "request fails due to unknown settings group" do
       let(:group) { "unknown" }
 
       before do
-        stub_request(:get, "#{base_uri}/settings/unknown").
-        to_return(fixture("settings_unknown_404.http"))
+        Chef::Log.stub(:error)
+        stub_request(:get, "#{base_uri}/settings/unknown").to_return(fixture("settings_unknown_404.http"))
       end
 
       it { expect { provider.load_current_resource }.to raise_error(Net::HTTPExceptions) }
+
+      it "logs the error" do
+        Chef::Log.should_receive(:error).with(%{Not found.})
+        provider.load_current_resource rescue nil
+      end
     end
   end
 
@@ -163,6 +169,7 @@ describe Chef::Provider::CouchbaseSettings do
       context "Couchbase fails the request" do
         let(:new_settings) { { "sendStats" => 42 } }
         let(:current_settings) { { "sendStats" => false } }
+        before { Chef::Log.stub(:error) }
 
         let! :stats_request do
           stub_request(:post, "#{base_uri}/settings/#{group}").with({

@@ -4,7 +4,20 @@ require "node_provider"
 
 describe Chef::Provider::CouchbaseNode do
   let(:provider) { described_class.new(new_resource, stub("run_context")) }
-  let(:new_resource) { stub(:name => "my node", :id => "self") }
+  let(:base_uri) { "#{new_resource.username}:#{new_resource.password}@localhost:8091" }
+  let(:id) { "self" }
+  let(:new_database_path) { "/opt/couchbase/var/lib/couchbase/data" }
+
+  let :new_resource do
+    stub({
+      :name => "my node",
+      :id => id,
+      :username => "Administrator",
+      :password => "password",
+      :database_path => new_database_path,
+      :updated_by_last_action => nil,
+    })
+  end
 
   describe ".ancestors" do
     it { described_class.ancestors.should include Chef::Provider }
@@ -14,7 +27,7 @@ describe Chef::Provider::CouchbaseNode do
     let(:current_resource) { provider.tap(&:load_current_resource).current_resource }
 
     context "for the local node" do
-      before { stub_request(:get, "localhost:8091/nodes/self").to_return(fixture("nodes_self_mnt.http")) }
+      before { stub_request(:get, "#{base_uri}/nodes/self").to_return(fixture("nodes_self_mnt.http")) }
 
       it { current_resource.should be_a_kind_of Chef::Resource::CouchbaseNode }
 
@@ -32,8 +45,8 @@ describe Chef::Provider::CouchbaseNode do
     end
 
     context "for a remote node" do
-      let(:new_resource) { stub(:name => "my node", :id => "10.0.1.20") }
-      before { stub_request(:get, "localhost:8091/nodes/10.0.1.20").to_return(fixture("nodes_self_opt.http")) }
+      let(:id) { "10.0.1.20" }
+      before { stub_request(:get, "#{base_uri}/nodes/10.0.1.20").to_return(fixture("nodes_self_opt.http")) }
 
       it "has the same name as the new resource" do
         current_resource.name.should == new_resource.name
@@ -49,11 +62,31 @@ describe Chef::Provider::CouchbaseNode do
     end
   end
 
+  describe "#load_current_resource" do
+    context "Couchbase fails the request" do
+      let(:id) { "10.0.1.20" }
+
+      before do
+        Chef::Log.stub(:error)
+        stub_request(:get, "#{base_uri}/nodes/#{id}").to_return(fixture("nodes_id_404.http"))
+      end
+
+      it { expect { provider.load_current_resource }.to raise_error(Net::HTTPExceptions) }
+
+      it "logs the error" do
+        Chef::Log.should_receive(:error).with(%{"Node is unknown to this cluster."})
+        provider.load_current_resource rescue nil
+      end
+    end
+  end
+
   describe "#action_modify" do
     before { provider.current_resource = current_resource }
 
     context "database path does not match" do
       shared_examples "modify couchbase node" do
+        let(:new_database_path) { "/mnt/couchbase-server/data/#{SecureRandom.hex(8)}" }
+
         let :current_resource do
           stub({
             :name => "my node",
@@ -62,17 +95,8 @@ describe Chef::Provider::CouchbaseNode do
           })
         end
 
-        let :new_resource do
-          stub({
-            :name => "my node",
-            :id => id,
-            :database_path => "/mnt/couchbase-server/data/#{SecureRandom.hex(8)}",
-            :updated_by_last_action => nil,
-          })
-        end
-
         let! :node_request do
-          stub_request(:post, "localhost:8091/nodes/#{id}/controller/settings").with({
+          stub_request(:post, "#{base_uri}/nodes/#{id}/controller/settings").with({
             :body => hash_including("path" => new_resource.database_path),
           })
         end
@@ -126,21 +150,26 @@ describe Chef::Provider::CouchbaseNode do
     end
 
     context "Couchbase fails the request" do
-      let :new_resource do
-        stub(:name => "my node", :id => "self", :database_path => "/mnt/couchbase-server/data")
-      end
+      let(:new_database_path) { "/mnt/couchbase-server/data" }
 
       let :current_resource do
         stub(:name => "my node", :id => "self", :database_path => "/opt/couchbase/var/lib/couchbase/data")
       end
 
-      let! :node_request do
-        stub_request(:post, "localhost:8091/nodes/self/controller/settings").with({
+      before do
+        Chef::Log.stub(:error)
+
+        stub_request(:post, "#{base_uri}/nodes/self/controller/settings").with({
           :body => hash_including("path" => new_resource.database_path),
         }).to_return(fixture("nodes_self_controller_settings_400.http"))
       end
 
       it { expect { provider.action_modify }.to raise_error(Net::HTTPExceptions) }
+
+      it "logs the error" do
+        Chef::Log.should_receive(:error).with(%{["Could not set the storage path. It must be a directory writable by 'couchbase' user."]})
+        provider.action_modify rescue nil
+      end
     end
   end
 end

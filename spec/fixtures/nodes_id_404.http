@@ -1,0 +1,9 @@
+HTTP/1.1 404 Object Not Found
+Server: Couchbase Server 2.0.0dp4-722-rel-community
+Pragma: no-cache
+Date: Sun, 27 May 2012 21:10:09 GMT
+Content-Type: application/json
+Content-Length: 34
+Cache-Control: no-cache
+
+"Node is unknown to this cluster."

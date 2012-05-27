@@ -70,6 +70,9 @@ end
 
 couchbase_node "self" do
   database_path node['couchbase']['database_path']
+
+  username node['couchbase']['username']
+  password node['couchbase']['password']
 end
 
 couchbase_settings "web" do

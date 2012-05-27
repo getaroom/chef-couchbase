@@ -1,8 +1,11 @@
 require "chef/provider"
+require File.join(File.dirname(__FILE__), "client")
 
 class Chef
   class Provider
     class CouchbaseSettings < Provider
+      include Couchbase::Client
+
       def load_current_resource
         @current_resource = Resource::CouchbaseSettings.new @new_resource.name
         @current_resource.group @new_resource.group
@@ -11,9 +14,7 @@ class Chef
 
       def action_modify
         unless settings_match?
-          response = Net::HTTP.post_form(uri, @new_resource.settings)
-          Chef::Log.error response.body unless response.kind_of? Net::HTTPSuccess
-          response.value
+          post "/settings/#{@new_resource.group}", @new_resource.settings
           @new_resource.updated_by_last_action true
           Chef::Log.info "#{@new_resource} modified"
         end
@@ -25,18 +26,10 @@ class Chef
         @new_resource.settings.all? { |key, value| @current_resource.settings[key.to_s] == value }
       end
 
-      def uri
-        @uri ||= URI.parse "http://#{@new_resource.username}:#{@new_resource.password}@localhost:8091/settings/#{@new_resource.group}"
-      end
-
       def settings_data
         @settings_data ||= begin
-          response = Net::HTTP.start(uri.host, uri.port) do |http|
-            request = Net::HTTP::Get.new uri.path
-            request.basic_auth uri.user, uri.password
-            http.request request
-          end
-
+          response = get "/settings/#{@new_resource.group}"
+          Chef::Log.error response.body unless response.kind_of?(Net::HTTPSuccess) || response.body.empty?
           response.value
           JSONCompat.from_json response.body
         end
