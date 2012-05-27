@@ -18,7 +18,6 @@ class Chef
 
       def action_create_if_missing
         unless @cluster_exists
-          uri = URI("http://localhost:8091/pools/#{@new_resource.id}")
           Net::HTTP.post_form(uri, "memoryQuota" => @new_resource.memory_quota_mb).value
           @new_resource.updated_by_last_action true
           Chef::Log.info("#{@new_resource} created")
@@ -26,6 +25,10 @@ class Chef
       end
 
       private
+
+      def uri
+        @uri ||= URI.parse "http://#{@new_resource.username}:#{@new_resource.password}@localhost:8091/pools/#{@new_resource.id}"
+      end
 
       def pool_memory_quota_mb
         pool_data["storageTotals"]["ram"]["quotaTotal"] / 1024 / 1024
@@ -35,7 +38,12 @@ class Chef
         return @pool_data if instance_variable_defined? "@pool_data"
 
         @pool_data ||= begin
-          response = Net::HTTP.get_response("localhost", "/pools/#{@new_resource.id}", 8091)
+          response = Net::HTTP.start(uri.host, uri.port) do |http|
+            request = Net::HTTP::Get.new uri.path
+            request.basic_auth uri.user, uri.password
+            http.request request
+          end
+
           JSONCompat.from_json response.body if response.kind_of?(Net::HTTPSuccess)
         end
       end

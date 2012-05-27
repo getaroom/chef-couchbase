@@ -71,6 +71,8 @@ couchbase_cluster
 
 ### Attribute Parameters
 
+* `username` - The username to use to authenticate with Couchbase
+* `password` - The password to use to authenticate with Couchbase
 * `id` - The id of the Couchbase cluster, typically "default"
 * `memory_quota_mb` - The per server RAM quota for the entire cluster in megabytes
 
@@ -78,6 +80,9 @@ couchbase_cluster
 
 ```ruby
 couchbase_cluster "default" do
+  username "Administrator"
+  password "password"
+
   memory_quota_mb 256
 end
 ```

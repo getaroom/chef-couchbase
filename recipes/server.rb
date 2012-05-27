@@ -85,4 +85,7 @@ end
 
 couchbase_cluster "default" do
   memory_quota_mb node['couchbase']['memory_quota_mb']
+
+  username node['couchbase']['username']
+  password node['couchbase']['password']
 end

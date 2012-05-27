@@ -4,11 +4,14 @@ require "cluster_resource"
 
 describe Chef::Provider::CouchbaseCluster do
   let(:provider) { described_class.new(new_resource, stub("run_context")) }
+  let(:base_uri) { "#{new_resource.username}:#{new_resource.password}@localhost:8091" }
 
   let :new_resource do
     stub({
       :name => "my new pool",
       :id => "default",
+      :username => "Administrator",
+      :password => "password",
       :memory_quota_mb => 256,
       :updated_by_last_action => nil,
     })
@@ -22,7 +25,7 @@ describe Chef::Provider::CouchbaseCluster do
     let(:current_resource) { provider.tap(&:load_current_resource).current_resource }
 
     context "a cluster exists" do
-      before { stub_request(:get, "localhost:8091/pools/default").to_return(fixture("pools_default_exists.http")) }
+      before { stub_request(:get, "#{base_uri}/pools/default").to_return(fixture("pools_default_exists.http")) }
 
       it { current_resource.should be_a_kind_of Chef::Resource::CouchbaseCluster }
 
@@ -40,7 +43,7 @@ describe Chef::Provider::CouchbaseCluster do
     end
 
     context "a cluster does not exist" do
-      before { stub_request(:get, "localhost:8091/pools/default").to_return(fixture("pools_default_404.http")) }
+      before { stub_request(:get, "#{base_uri}/pools/default").to_return(fixture("pools_default_404.http")) }
 
       it { current_resource.should be_a_kind_of Chef::Resource::CouchbaseCluster }
 
@@ -59,7 +62,7 @@ describe Chef::Provider::CouchbaseCluster do
   end
 
   describe "#cluster_exists" do
-    before { stub_request(:get, "localhost:8091/pools/default").to_return(fixture(fixture_name)) }
+    before { stub_request(:get, "#{base_uri}/pools/default").to_return(fixture(fixture_name)) }
     subject { provider.tap(&:load_current_resource).cluster_exists }
 
     context "the cluster exists" do
@@ -85,7 +88,7 @@ describe Chef::Provider::CouchbaseCluster do
       let(:cluster_exists) { false }
 
       let! :cluster_request do
-        stub_request(:post, "localhost:8091/pools/default").with({
+        stub_request(:post, "#{base_uri}/pools/default").with({
           :body => hash_including("memoryQuota" => new_resource.memory_quota_mb.to_s),
         })
       end
@@ -110,7 +113,7 @@ describe Chef::Provider::CouchbaseCluster do
       let(:cluster_exists) { false }
 
       let! :cluster_request do
-        stub_request(:post, "localhost:8091/pools/default").to_return(fixture("pools_default_400.http"))
+        stub_request(:post, "#{base_uri}/pools/default").to_return(fixture("pools_default_400.http"))
       end
 
       it { expect { provider.action_create_if_missing }.to raise_error(Net::HTTPExceptions) }
