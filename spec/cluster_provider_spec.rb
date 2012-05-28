@@ -40,6 +40,10 @@ describe Chef::Provider::CouchbaseCluster do
       it "populates the memory_quota_mb" do
         current_resource.memory_quota_mb.should == 256
       end
+
+      it "populated exists with true" do
+        current_resource.exists.should be_true
+      end
     end
 
     context "a cluster does not exist" do
@@ -58,21 +62,10 @@ describe Chef::Provider::CouchbaseCluster do
       it "does not populate the memory_quota_mb" do
         expect { current_resource.memory_quota_mb }.to raise_error
       end
-    end
-  end
 
-  describe "#cluster_exists" do
-    before { stub_request(:get, "#{base_uri}/pools/default").to_return(fixture(fixture_name)) }
-    subject { provider.tap(&:load_current_resource).cluster_exists }
-
-    context "the cluster exists" do
-      let(:fixture_name) { "pools_default_exists.http" }
-      it { should be_true }
-    end
-
-    context "the cluster does not exist" do
-      let(:fixture_name) { "pools_default_404.http" }
-      it { should be_false }
+      it "populated exists with false" do
+        current_resource.exists.should be_false
+      end
     end
   end
 
@@ -80,8 +73,11 @@ describe Chef::Provider::CouchbaseCluster do
     let(:memory_quota_mb) { 256 }
 
     before do
-      provider.current_resource = stub(:id => "default", :memory_quota_mb => memory_quota_mb)
-      provider.cluster_exists = cluster_exists
+      provider.current_resource = stub({
+        :id => "default",
+        :memory_quota_mb => memory_quota_mb,
+        :exists => cluster_exists,
+      })
     end
 
     context "cluster does not exist" do

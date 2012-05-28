@@ -7,6 +7,7 @@ class Chef
       include Couchbase::CredentialsAttributes
 
       attribute :id, :kind_of => String, :name_attribute => true
+      attribute :exists, :kind_of => [TrueClass, FalseClass], :required => true
       attribute :memory_quota_mb, :kind_of => Integer, :required => true, :callbacks => {
         "must be at least 256" => lambda { |quota| quota >= 256 }
       }

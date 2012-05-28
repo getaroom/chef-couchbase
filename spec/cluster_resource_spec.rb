@@ -21,6 +21,26 @@ describe Chef::Resource::CouchbaseCluster do
     it { should include :nothing }
   end
 
+  describe "#exists" do
+    it "can be assigned true" do
+      resource.exists true
+      resource.exists.should == true
+    end
+
+    it "can be assigned false" do
+      resource.exists false
+      resource.exists.should == false
+    end
+
+    it "cannot be assigned an Integer" do
+      expect { resource.exists 42 }.to raise_error Chef::Exceptions::ValidationFailed
+    end
+
+    it "cannot be assigned nil" do
+      expect { resource.exists nil }.to raise_error Chef::Exceptions::ValidationFailed
+    end
+  end
+
   describe "#id" do
     it "can be assigned" do
       resource.id "new_pool"

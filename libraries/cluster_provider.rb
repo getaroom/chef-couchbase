@@ -5,21 +5,16 @@ class Chef
   class Provider
     class CouchbaseCluster < Provider
       include Couchbase::Client
-      attr_accessor :cluster_exists
 
       def load_current_resource
         @current_resource = Resource::CouchbaseCluster.new(@new_resource.name)
         @current_resource.id @new_resource.id
-
-        @cluster_exists = pool_data
-
-        if @cluster_exists
-          @current_resource.memory_quota_mb pool_memory_quota_mb
-        end
+        @current_resource.exists !!pool_data
+        @current_resource.memory_quota_mb pool_memory_quota_mb if @current_resource.exists
       end
 
       def action_create_if_missing
-        unless @cluster_exists
+        unless @current_resource.exists
           post "/pools/#{@new_resource.id}", "memoryQuota" => @new_resource.memory_quota_mb
           @new_resource.updated_by_last_action true
           Chef::Log.info("#{@new_resource} created")
