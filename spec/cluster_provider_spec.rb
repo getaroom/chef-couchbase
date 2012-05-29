@@ -69,6 +69,14 @@ describe Chef::Provider::CouchbaseCluster do
     end
   end
 
+  describe "#load_current_resource" do
+    context "authorization error" do
+      before { stub_request(:get, "#{base_uri}/pools/default").to_return(fixture("pools_default_401.http")) }
+
+      it { expect { provider.load_current_resource }.to raise_error(Net::HTTPExceptions) }
+    end
+  end
+
   describe "#action_create_if_missing" do
     let(:memory_quota_mb) { 256 }
 

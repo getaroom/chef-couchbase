@@ -32,6 +32,7 @@ class Chef
 
         @pool_data ||= begin
           response = get "/pools/#{@new_resource.id}"
+          response.error! unless response.kind_of?(Net::HTTPSuccess) || response.kind_of?(Net::HTTPNotFound)
           JSONCompat.from_json response.body if response.kind_of?(Net::HTTPSuccess)
         end
       end
