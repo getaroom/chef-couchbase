@@ -120,6 +120,18 @@ couchbase_settings "autoFailover" do
 end
 ```
 
+couchbase_bucket
+----------------
+
+### Actions
+
+* `:create` - **Default** Create a Couchbase bucket
+
+### Attribute Parameters
+
+* `replicas` - Number of replica (backup) copies
+* `memory_quota_mb` - The bucket's per server RAM quota for the entire cluster in megabytes
+
 LICENSE AND AUTHOR
 ==================
 
