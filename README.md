@@ -129,8 +129,22 @@ couchbase_bucket
 
 ### Attribute Parameters
 
-* `replicas` - Number of replica (backup) copies
+* `username` - The username to use to authenticate with Couchbase
+* `password` - The password to use to authenticate with Couchbase
+* `replicas` - Number of replica (backup) copies, defaults to 1. Set to false to disable
 * `memory_quota_mb` - The bucket's per server RAM quota for the entire cluster in megabytes
+
+### Examples
+
+```ruby
+couchbase_bucket "default" do
+  username "Administrator"
+  password "password"
+
+  memory_quota_mb 128
+  replicas 2
+end
+```
 
 LICENSE AND AUTHOR
 ==================
