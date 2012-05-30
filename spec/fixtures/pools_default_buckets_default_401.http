@@ -1,0 +1,8 @@
+HTTP/1.1 401 Unauthorized
+WWW-Authenticate: Basic realm="Couchbase Server Admin / REST"
+Server: Couchbase Server 1.8.0r_74_g85f643d-community
+Pragma: no-cache
+Date: Wed, 30 May 2012 20:02:27 GMT
+Content-Length: 0
+Cache-Control: no-cache
+

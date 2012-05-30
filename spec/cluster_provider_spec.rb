@@ -41,7 +41,7 @@ describe Chef::Provider::CouchbaseCluster do
         current_resource.memory_quota_mb.should == 256
       end
 
-      it "populated exists with true" do
+      it "populates exists with true" do
         current_resource.exists.should be_true
       end
     end
@@ -63,7 +63,7 @@ describe Chef::Provider::CouchbaseCluster do
         expect { current_resource.memory_quota_mb }.to raise_error
       end
 
-      it "populated exists with false" do
+      it "populates exists with false" do
         current_resource.exists.should be_false
       end
     end

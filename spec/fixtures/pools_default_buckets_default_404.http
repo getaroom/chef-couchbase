@@ -1,0 +1,7 @@
+HTTP/1.1 404 Object Not Found
+Server: Couchbase Server 1.8.0r_74_g85f643d-community
+Pragma: no-cache
+Date: Wed, 30 May 2012 19:50:03 GMT
+Cache-Control: no-cache
+
+Requested resource not found.
