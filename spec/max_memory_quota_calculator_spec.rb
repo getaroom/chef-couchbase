@@ -1,8 +1,8 @@
 require "spec_helper"
 require "active_support/core_ext/numeric/bytes"
-require "couchbase_max_memory_quota_calculator"
+require "max_memory_quota_calculator"
 
-describe CouchbaseMaxMemoryQuotaCalculator do
+describe Couchbase::MaxMemoryQuotaCalculator do
   describe ".from_node" do
     let(:calculator) { described_class.from_node(node) }
 

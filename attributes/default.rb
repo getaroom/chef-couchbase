@@ -20,4 +20,4 @@ default['couchbase']['log_dir'] = "/opt/couchbase/var/lib/couchbase/logs"
 default['couchbase']['username'] = "Administrator"
 default['couchbase']['password'] = ""
 
-default['couchbase']['memory_quota_mb'] = CouchbaseMaxMemoryQuotaCalculator.from_node(node).in_megabytes
+default['couchbase']['memory_quota_mb'] = Couchbase::MaxMemoryQuotaCalculator.from_node(node).in_megabytes

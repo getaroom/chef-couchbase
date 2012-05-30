@@ -51,19 +51,19 @@ couchbase_node
 
 ### Attribute Parameters
 
-* `username` - The username to use to authenticate with Couchbase
-* `password` - The password to use to authenticate with Couchbase
 * `id` - The id of the Couchbase node, typically "self"
 * `database_path` - The directory the Couchbase node should persist data to
+* `username` - The username to use to authenticate with Couchbase
+* `password` - The password to use to authenticate with Couchbase
 
 ### Examples
 
 ```ruby
 couchbase_node "self" do
+  database_path "/mnt/couchbase-server/data"
+
   username "Administrator"
   password "password"
-
-  database_path "/mnt/couchbase-server/data"
 end
 ```
 
@@ -76,19 +76,19 @@ couchbase_cluster
 
 ### Attribute Parameters
 
-* `username` - The username to use to authenticate with Couchbase
-* `password` - The password to use to authenticate with Couchbase
 * `id` - The id of the Couchbase cluster, typically "default"
 * `memory_quota_mb` - The per server RAM quota for the entire cluster in megabytes
+* `username` - The username to use to authenticate with Couchbase
+* `password` - The password to use to authenticate with Couchbase
 
 ### Examples
 
 ```ruby
 couchbase_cluster "default" do
+  memory_quota_mb 256
+
   username "Administrator"
   password "password"
-
-  memory_quota_mb 256
 end
 ```
 
@@ -101,22 +101,22 @@ couchbase_settings
 
 ### Attribute Parameters
 
-* `username` - The username to use to authenticate with Couchbase
-* `password` - The password to use to authenticate with Couchbase
 * `group` - Which group of settings to modify
 * `settings` - The hash of settings to modify
+* `username` - The username to use to authenticate with Couchbase
+* `password` - The password to use to authenticate with Couchbase
 
 ### Examples
 
 ```ruby
 couchbase_settings "autoFailover" do
-  username "Administrator"
-  password "password"
-
   settings({
     "enabled" => true,
     "timeout" => 30,
   })
+
+  username "Administrator"
+  password "password"
 end
 ```
 
@@ -129,20 +129,20 @@ couchbase_bucket
 
 ### Attribute Parameters
 
-* `username` - The username to use to authenticate with Couchbase
-* `password` - The password to use to authenticate with Couchbase
 * `replicas` - Number of replica (backup) copies, defaults to 1. Set to false to disable
 * `memory_quota_mb` - The bucket's per server RAM quota for the entire cluster in megabytes
+* `username` - The username to use to authenticate with Couchbase
+* `password` - The password to use to authenticate with Couchbase
 
 ### Examples
 
 ```ruby
 couchbase_bucket "default" do
-  username "Administrator"
-  password "password"
-
   memory_quota_mb 128
   replicas 2
+
+  username "Administrator"
+  password "password"
 end
 ```
 
