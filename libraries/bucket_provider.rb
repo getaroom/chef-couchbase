@@ -17,7 +17,26 @@ class Chef
         end
       end
 
+      def action_create
+        unless @current_resource.exists
+          post "/pools/default/buckets", create_params
+          new_resource.updated_by_last_action true
+          Chef::Log.info "#{new_resource} created"
+        end
+      end
+
       private
+
+      def create_params
+        {
+          "authType" => "sasl",
+          "saslPassword" => "",
+          "bucketType" => "membase",
+          "name" => new_resource.bucket_name,
+          "ramQuotaMB" => new_resource.memory_quota_mb,
+          "replicaNumber" => new_resource.replicas || 0,
+        }
+      end
 
       def bucket_memory_quota_mb
         bucket_data["quota"]["rawRAM"] / 1024 / 1024
@@ -33,7 +52,7 @@ class Chef
         @bucket_data ||= begin
           response = get "/pools/default/buckets/#{@new_resource.bucket_name}"
           response.error! unless response.kind_of?(Net::HTTPSuccess) || response.kind_of?(Net::HTTPNotFound)
-          JSONCompat.from_json response.body if response.kind_of?(Net::HTTPSuccess)
+          JSONCompat.from_json response.body if response.kind_of? Net::HTTPSuccess
         end
       end
     end

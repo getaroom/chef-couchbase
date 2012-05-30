@@ -6,6 +6,7 @@ describe Chef::Provider::CouchbaseBucket do
   let(:provider) { described_class.new new_resource, stub("run_context") }
   let(:base_uri) { "#{new_resource.username}:#{new_resource.password}@localhost:8091" }
   let(:bucket_name) { "default" }
+  let(:new_replicas) { 1 }
 
   let :new_resource do
     stub({
@@ -13,6 +14,9 @@ describe Chef::Provider::CouchbaseBucket do
       :bucket_name => bucket_name,
       :username => "Administrator",
       :password => "password",
+      :memory_quota_mb => 100,
+      :replicas => new_replicas,
+      :updated_by_last_action => nil,
     })
   end
 
@@ -117,6 +121,103 @@ describe Chef::Provider::CouchbaseBucket do
       end
 
       it { expect { provider.load_current_resource }.to raise_error(Net::HTTPExceptions) }
+    end
+  end
+
+  describe "#action_create" do
+    before { provider.current_resource = current_resource }
+    subject { provider.action_create }
+
+    let :current_resource do
+      stub({
+        :name => new_resource.name,
+        :bucket_name => new_resource.bucket_name,
+        :exists => bucket_exists,
+      })
+    end
+
+    context "when the bucket does not exist" do
+      let(:bucket_exists) { false }
+
+      let! :request do
+        stub_request(:post, "#{base_uri}/pools/default/buckets")
+      end
+
+      context "with a default configuration" do
+        it "POSTs to the Management REST API to create the bucket" do
+          provider.action_create
+          request.with(:body => hash_including({
+            "authType" => "sasl",
+            "saslPassword" => "",
+            "bucketType" => "membase",
+            "name" => new_resource.bucket_name,
+            "ramQuotaMB" => new_resource.memory_quota_mb.to_s,
+            "replicaNumber" => new_resource.replicas.to_s,
+          })).should have_been_made.once
+        end
+
+        it "updates the new resource" do
+          new_resource.should_receive(:updated_by_last_action).with(true)
+          provider.action_create
+        end
+
+        it "logs the modification" do
+          Chef::Log.should_receive(:info).with(/created/)
+          provider.action_create
+        end
+      end
+
+      context "and replicas are set to false" do
+        let(:new_replicas) { false }
+
+        it "POSTs replicaNumber=0 to the Management REST API" do
+          provider.action_create
+          request.with(:body => hash_including("replicaNumber" => "0")).should have_been_made.once
+        end
+      end
+    end
+
+    context "when the bucket exists" do
+      let(:bucket_exists) { true }
+
+      context "when the bucket configuration exactly matches" do
+        let(:current_resource) { new_resource.tap { |resource| resource.stub(:exists => bucket_exists) } }
+        it_should_behave_like "a no op provider action"
+      end
+
+      context "when the memory quota does not match" do
+        let :current_resource do
+          new_resource.tap do |resource|
+            resource.stub({
+              :exists => bucket_exists,
+              :memory_quota_mb => (new_resource + 1),
+            })
+          end
+        end
+
+        pending
+      end
+
+      context "when the bucket configuration exactly matches but replicas is set to false" do pending end
+      context "when the existing bucket is a memcached bucket" do pending end
+      context "when the existing bucket has a different replica number" do pending end
+      context "when the auth type does not match?" do pending end
+    end
+
+    context "Couchbase fails the request" do
+      let(:bucket_exists) { false }
+
+      before do
+        Chef::Log.stub(:error)
+        stub_request(:post, "#{base_uri}/pools/default/buckets").to_return(fixture("pools_default_buckets_400.http"))
+      end
+
+      it { expect { provider.action_create }.to raise_error(Net::HTTPExceptions) }
+
+      it "logs the error" do
+        Chef::Log.should_receive(:error).with(/invalid authType/)
+        provider.action_create rescue nil
+      end
     end
   end
 end

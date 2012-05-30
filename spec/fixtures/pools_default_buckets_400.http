@@ -1,0 +1,8 @@
+HTTP/1.1 400 Bad Request
+Server: Couchbase Server 1.8.0r_74_g85f643d-community
+Pragma: no-cache
+Date: Wed, 30 May 2012 21:47:54 GMT
+Content-Type: application/json
+Cache-Control: no-cache
+
+{"errors":{"authType":"invalid authType"},"summaries":{"ramSummary":{"total":536870912,"otherBuckets":536870912,"nodesCount":1,"perNodeMegs":0,"thisAlloc":0,"thisUsed":0,"free":0},"hddSummary":{"total":999345127424.0,"otherData":49957121259.0,"otherBuckets":10135112,"thisUsed":0,"free":949377871053.0}}}
