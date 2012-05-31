@@ -18,14 +18,26 @@ class Chef
       end
 
       def action_create
-        unless @current_resource.exists
-          post "/pools/default/buckets", create_params
-          new_resource.updated_by_last_action true
-          Chef::Log.info "#{new_resource} created"
+        if !@current_resource.exists
+          create_bucket
+        elsif @current_resource.memory_quota_mb != @new_resource.memory_quota_mb
+          modify_bucket
         end
       end
 
       private
+
+      def create_bucket
+        post "/pools/default/buckets", create_params
+        new_resource.updated_by_last_action true
+        Chef::Log.info "#{new_resource} created"
+      end
+
+      def modify_bucket
+        post "/pools/default/buckets/#{@new_resource.bucket_name}", modify_params
+        new_resource.updated_by_last_action true
+        Chef::Log.info "#{new_resource} memory_quota_mb changed to #{@new_resource.memory_quota_mb}"
+      end
 
       def create_params
         {
@@ -35,6 +47,12 @@ class Chef
           "name" => new_resource.bucket_name,
           "ramQuotaMB" => new_resource.memory_quota_mb,
           "replicaNumber" => new_resource.replicas || 0,
+        }
+      end
+
+      def modify_params
+        {
+          "ramQuotaMB" => new_resource.memory_quota_mb,
         }
       end
 

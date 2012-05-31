@@ -107,7 +107,7 @@ describe Chef::Provider::CouchbaseCluster do
         provider.action_create_if_missing
       end
 
-      it "logs the modification" do
+      it "logs the creation" do
         Chef::Log.should_receive(:info).with(/created/)
         provider.action_create_if_missing
       end

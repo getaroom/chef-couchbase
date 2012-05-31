@@ -127,21 +127,22 @@ describe Chef::Provider::CouchbaseBucket do
   describe "#action_create" do
     before { provider.current_resource = current_resource }
     subject { provider.action_create }
+    let(:current_memory_quota_mb) { new_resource.memory_quota_mb }
+    let(:current_replicas) { new_resource.replicas || 0 }
 
     let :current_resource do
       stub({
         :name => new_resource.name,
         :bucket_name => new_resource.bucket_name,
         :exists => bucket_exists,
+        :memory_quota_mb => current_memory_quota_mb,
+        :replicas => current_replicas,
       })
     end
 
     context "when the bucket does not exist" do
       let(:bucket_exists) { false }
-
-      let! :request do
-        stub_request(:post, "#{base_uri}/pools/default/buckets")
-      end
+      let!(:request) { stub_request(:post, "#{base_uri}/pools/default/buckets") }
 
       context "with a default configuration" do
         it "POSTs to the Management REST API to create the bucket" do
@@ -161,7 +162,7 @@ describe Chef::Provider::CouchbaseBucket do
           provider.action_create
         end
 
-        it "logs the modification" do
+        it "logs the creation" do
           Chef::Log.should_receive(:info).with(/created/)
           provider.action_create
         end
@@ -179,29 +180,32 @@ describe Chef::Provider::CouchbaseBucket do
 
     context "when the bucket exists" do
       let(:bucket_exists) { true }
+      let!(:request) { stub_request(:post, "#{base_uri}/pools/default/buckets/#{new_resource.bucket_name}") }
 
       context "when the bucket configuration exactly matches" do
-        let(:current_resource) { new_resource.tap { |resource| resource.stub(:exists => bucket_exists) } }
         it_should_behave_like "a no op provider action"
       end
 
       context "when the memory quota does not match" do
-        let :current_resource do
-          new_resource.tap do |resource|
-            resource.stub({
-              :exists => bucket_exists,
-              :memory_quota_mb => (new_resource + 1),
-            })
-          end
+        let(:current_memory_quota_mb) { new_resource.memory_quota_mb + 1 }
+
+        it "POSTs to the Management REST API to modify the bucket" do
+          provider.action_create
+          request.with(:body => hash_including({
+            "ramQuotaMB" => new_resource.memory_quota_mb.to_s,
+          })).should have_been_made.once
         end
 
-        pending
-      end
+        it "updates the new resource" do
+          new_resource.should_receive(:updated_by_last_action).with(true)
+          provider.action_create
+        end
 
-      context "when the bucket configuration exactly matches but replicas is set to false" do pending end
-      context "when the existing bucket is a memcached bucket" do pending end
-      context "when the existing bucket has a different replica number" do pending end
-      context "when the auth type does not match?" do pending end
+        it "logs the modification" do
+          Chef::Log.should_receive(:info).with(/memory_quota_mb changed to #{new_resource.memory_quota_mb}/)
+          provider.action_create
+        end
+      end
     end
 
     context "Couchbase fails the request" do

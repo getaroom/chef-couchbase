@@ -30,3 +30,27 @@ couchbase_bucket "default" do
   username node['couchbase']['username']
   password node['couchbase']['password']
 end
+
+couchbase_bucket "modified creation" do
+  bucket_name "modified"
+  memory_quota_mb 100
+  replicas false
+
+  username node['couchbase']['username']
+  password node['couchbase']['password']
+end
+
+ruby_block "wait for bucket creation, which is asynchronous" do
+  block do
+    sleep 2
+  end
+end
+
+couchbase_bucket "modified modification" do
+  bucket_name "modified"
+  memory_quota_mb 150
+  replicas 2
+
+  username node['couchbase']['username']
+  password node['couchbase']['password']
+end
