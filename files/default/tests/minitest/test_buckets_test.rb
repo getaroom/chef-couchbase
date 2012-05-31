@@ -6,7 +6,12 @@ describe_recipe "couchbase::test_buckets" do
   MiniTest::Chef::Resources.register_resource :couchbase_bucket, :username, :password
 
   describe "default bucket" do
-    let(:bucket) { couchbase_bucket "default" }
+    let :bucket do
+      couchbase_bucket("default", {
+        :username => node["couchbase"]["username"],
+        :password => node["couchbase"]["password"],
+      })
+    end
 
     it "exists" do
       assert bucket.exists
@@ -17,7 +22,7 @@ describe_recipe "couchbase::test_buckets" do
     end
 
     it "has 1 replica" do
-      buckdet.must_have :replicas, 1
+      bucket.must_have :replicas, 1
     end
   end
 end

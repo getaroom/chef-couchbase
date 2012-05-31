@@ -1,5 +1,5 @@
-name "server_with_custom_memory_quota"
-description "Test for server recipe"
+name "server_and_buckets"
+description "Test for server recipe and bucket resource/provider"
 
 run_list(
   "recipe[couchbase::server]",
@@ -9,7 +9,6 @@ run_list(
 
 default_attributes({
   "couchbase" => {
-    "memory_quota_mb" => 257,
     "password" => "password",
   },
 })

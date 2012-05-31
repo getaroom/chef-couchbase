@@ -28,5 +28,5 @@ couchbase_bucket "default" do
   memory_quota_mb 100
 
   username node['couchbase']['username']
-  password node['couchbase']['username']
+  password node['couchbase']['password']
 end
