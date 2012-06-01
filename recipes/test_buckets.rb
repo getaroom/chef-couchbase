@@ -31,10 +31,18 @@ couchbase_bucket "default" do
   password node['couchbase']['password']
 end
 
-couchbase_bucket "modified creation" do
-  bucket "modified"
+couchbase_bucket "modified mb creation" do
+  bucket "modified_mb"
   memory_quota_mb 100
   replicas false
+
+  username node['couchbase']['username']
+  password node['couchbase']['password']
+end
+
+couchbase_bucket "modified % creation" do
+  bucket "modified_percent"
+  memory_quota_percent 0.1
 
   username node['couchbase']['username']
   password node['couchbase']['password']
@@ -46,10 +54,18 @@ ruby_block "wait for bucket creation, which is asynchronous" do
   end
 end
 
-couchbase_bucket "modified modification" do
-  bucket "modified"
+couchbase_bucket "modified mb modification" do
+  bucket "modified_mb"
   memory_quota_mb 150
   replicas 2
+
+  username node['couchbase']['username']
+  password node['couchbase']['password']
+end
+
+couchbase_bucket "modified % modification" do
+  bucket "modified_percent"
+  memory_quota_percent 0.15
 
   username node['couchbase']['username']
   password node['couchbase']['password']

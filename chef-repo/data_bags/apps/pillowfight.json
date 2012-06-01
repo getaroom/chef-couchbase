@@ -16,6 +16,11 @@
       "replicas": 2,
       "memory_quota_mb": 200
     },
+    "production_percent": {
+      "bucket": "production_percent",
+      "replicas": 0,
+      "memory_quota_percent": 0.1
+    },
     "staging": {
       "bucket": "staging_default",
       "memory_quota_mb": 100

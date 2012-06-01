@@ -1,10 +1,12 @@
 require "chef/provider"
 require File.join(File.dirname(__FILE__), "client")
+require File.join(File.dirname(__FILE__), "cluster_data")
 
 class Chef
   class Provider
     class CouchbaseCluster < Provider
       include Couchbase::Client
+      include Couchbase::ClusterData
 
       def load_current_resource
         @current_resource = Resource::CouchbaseCluster.new @new_resource.name
@@ -18,22 +20,6 @@ class Chef
           post "/pools/#{@new_resource.cluster}", "memoryQuota" => @new_resource.memory_quota_mb
           @new_resource.updated_by_last_action true
           Chef::Log.info "#{@new_resource} created"
-        end
-      end
-
-      private
-
-      def pool_memory_quota_mb
-        pool_data["storageTotals"]["ram"]["quotaTotal"] / 1024 / 1024
-      end
-
-      def pool_data
-        return @pool_data if instance_variable_defined? "@pool_data"
-
-        @pool_data ||= begin
-          response = get "/pools/#{@new_resource.cluster}"
-          response.error! unless response.kind_of?(Net::HTTPSuccess) || response.kind_of?(Net::HTTPNotFound)
-          JSONCompat.from_json response.body if response.kind_of? Net::HTTPSuccess
         end
       end
     end

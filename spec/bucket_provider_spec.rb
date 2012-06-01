@@ -7,14 +7,18 @@ describe Chef::Provider::CouchbaseBucket do
   let(:base_uri) { "#{new_resource.username}:#{new_resource.password}@localhost:8091" }
   let(:bucket_name) { "default" }
   let(:new_replicas) { 1 }
+  let(:new_memory_quota_mb) { 100 }
+  let(:new_memory_quota_percent) { nil }
 
   let :new_resource do
     stub({
       :name => "mah_bukkit",
       :bucket => bucket_name,
+      :cluster => "default_#{SecureRandom.hex(2)}",
       :username => "Administrator",
       :password => "password",
-      :memory_quota_mb => 100,
+      :memory_quota_mb => new_memory_quota_mb,
+      :memory_quota_percent => new_memory_quota_percent,
       :replicas => new_replicas,
       :updated_by_last_action => nil,
     })
@@ -29,7 +33,7 @@ describe Chef::Provider::CouchbaseBucket do
 
     context "when the bucket exists" do
       before do
-        stub_request(:get, "#{base_uri}/pools/default/buckets/#{new_resource.bucket}").
+        stub_request(:get, "#{base_uri}/pools/#{new_resource.cluster}/buckets/#{new_resource.bucket}").
         to_return(fixture("pools_default_buckets_default_exists.http"))
       end
 
@@ -41,6 +45,10 @@ describe Chef::Provider::CouchbaseBucket do
 
       it "has the same bucket name as the new resource" do
         current_resource.bucket.should == new_resource.bucket
+      end
+
+      it "has the same cluster as the new resource" do
+        current_resource.cluster.should == new_resource.cluster
       end
 
       it "populates exists with true" do
@@ -60,7 +68,7 @@ describe Chef::Provider::CouchbaseBucket do
       let(:bucket_name) { "nondefault" }
 
       before do
-        stub_request(:get, "#{base_uri}/pools/default/buckets/#{new_resource.bucket}").
+        stub_request(:get, "#{base_uri}/pools/#{new_resource.cluster}/buckets/#{new_resource.bucket}").
         to_return(fixture("pools_default_buckets_nondefault_exists.http"))
       end
 
@@ -72,6 +80,10 @@ describe Chef::Provider::CouchbaseBucket do
 
       it "has the same bucket name as the new resource" do
         current_resource.bucket.should == new_resource.bucket
+      end
+
+      it "has the same cluster as the new resource" do
+        current_resource.cluster.should == new_resource.cluster
       end
 
       it "populates exists with true" do
@@ -89,7 +101,7 @@ describe Chef::Provider::CouchbaseBucket do
 
     context "when the bucket does not exist" do
       before do
-        stub_request(:get, "#{base_uri}/pools/default/buckets/#{new_resource.bucket}").
+        stub_request(:get, "#{base_uri}/pools/#{new_resource.cluster}/buckets/#{new_resource.bucket}").
         to_return(fixture("pools_default_buckets_default_404.http"))
       end
 
@@ -106,17 +118,13 @@ describe Chef::Provider::CouchbaseBucket do
       it "populates exists with false" do
         current_resource.exists.should be_false
       end
-
-      it "should not populate memory_quota_mb" do
-        expect { current_resource.memory_quota_mb }.to raise_error Chef::Exceptions::ValidationFailed
-      end
     end
   end
 
   describe "#load_current_resource" do
     context "authorization error" do
       before do
-        stub_request(:get, "#{base_uri}/pools/default/buckets/default").
+        stub_request(:get, "#{base_uri}/pools/#{new_resource.cluster}/buckets/default").
         to_return(fixture("pools_default_buckets_default_401.http"))
       end
 
@@ -142,7 +150,7 @@ describe Chef::Provider::CouchbaseBucket do
 
     context "when the bucket does not exist" do
       let(:bucket_exists) { false }
-      let!(:request) { stub_request(:post, "#{base_uri}/pools/default/buckets") }
+      let!(:request) { stub_request(:post, "#{base_uri}/pools/#{new_resource.cluster}/buckets") }
 
       context "with a default configuration" do
         it "POSTs to the Management REST API to create the bucket" do
@@ -176,17 +184,64 @@ describe Chef::Provider::CouchbaseBucket do
           request.with(:body => hash_including("replicaNumber" => "0")).should have_been_made.once
         end
       end
+
+      context "and memory quota percent is set" do
+        let(:new_memory_quota_mb) { nil }
+
+        context "the server quota is 256MB" do
+          before { stub_request(:get, "#{base_uri}/pools/#{new_resource.cluster}").to_return(fixture("pools_default_exists.http")) }
+
+          context "to 0.5" do
+            let(:new_memory_quota_percent) { 0.5 }
+
+            it "POSTs ramQuotaMB=128 to the Management REST API" do
+              provider.action_create
+              request.with(:body => hash_including("ramQuotaMB" => "128")).should have_been_made.once
+            end
+          end
+
+          context "to 1.0" do
+            let(:new_memory_quota_percent) { 1.0 }
+
+            it "POSTs ramQuotaMB=256 to the Management REST API" do
+              provider.action_create
+              request.with(:body => hash_including("ramQuotaMB" => "256")).should have_been_made.once
+            end
+          end
+        end
+
+        context "the server quota is 1024MB" do
+          before { stub_request(:get, "#{base_uri}/pools/#{new_resource.cluster}").to_return(fixture("pools_default_1gb.http")) }
+
+          context "to 0.5" do
+            let(:new_memory_quota_percent) { 0.5 }
+
+            it "POSTs ramQuotaMB=512 to the Management REST API" do
+              provider.action_create
+              request.with(:body => hash_including("ramQuotaMB" => "512")).should have_been_made.once
+            end
+          end
+        end
+      end
     end
 
     context "when the bucket exists" do
       let(:bucket_exists) { true }
-      let!(:request) { stub_request(:post, "#{base_uri}/pools/default/buckets/#{new_resource.bucket}") }
+      let!(:request) { stub_request(:post, "#{base_uri}/pools/#{new_resource.cluster}/buckets/#{new_resource.bucket}") }
 
-      context "when the bucket configuration exactly matches" do
+      context "when the bucket configuration exactly matches using a memory quota mb" do
         it_should_behave_like "a no op provider action"
       end
 
-      context "when the memory quota does not match" do
+      context "when the bucket configuration exactly matches using a memory quota percent" do
+        let(:new_memory_quota_mb) { nil }
+        let(:current_memory_quota_mb) { 512 }
+        let(:new_memory_quota_percent) { 0.5 }
+        before { stub_request(:get, "#{base_uri}/pools/#{new_resource.cluster}").to_return(fixture("pools_default_1gb.http")) }
+        it_should_behave_like "a no op provider action"
+      end
+
+      context "when the memory quota mb does not match" do
         let(:current_memory_quota_mb) { new_resource.memory_quota_mb + 1 }
 
         it "POSTs to the Management REST API to modify the bucket" do
@@ -206,6 +261,28 @@ describe Chef::Provider::CouchbaseBucket do
           provider.action_create
         end
       end
+
+      context "when the memory quota percent does not match" do
+        let(:new_memory_quota_mb) { nil }
+        let(:current_memory_quota_mb) { 256 }
+        let(:new_memory_quota_percent) { 0.5 }
+        before { stub_request(:get, "#{base_uri}/pools/#{new_resource.cluster}").to_return(fixture("pools_default_1gb.http")) }
+
+        it "POSTs to the Management REST API to modify the bucket" do
+          provider.action_create
+          request.with(:body => hash_including("ramQuotaMB" => "512")).should have_been_made.once
+        end
+
+        it "updates the new resource" do
+          new_resource.should_receive(:updated_by_last_action).with(true)
+          provider.action_create
+        end
+
+        it "logs the modification" do
+          Chef::Log.should_receive(:info).with(/memory_quota_mb changed to 512/)
+          provider.action_create
+        end
+      end
     end
 
     context "Couchbase fails the request" do
@@ -213,7 +290,7 @@ describe Chef::Provider::CouchbaseBucket do
 
       before do
         Chef::Log.stub(:error)
-        stub_request(:post, "#{base_uri}/pools/default/buckets").to_return(fixture("pools_default_buckets_400.http"))
+        stub_request(:post, "#{base_uri}/pools/#{new_resource.cluster}/buckets").to_return(fixture("pools_default_buckets_400.http"))
       end
 
       it { expect { provider.action_create }.to raise_error(Net::HTTPExceptions) }

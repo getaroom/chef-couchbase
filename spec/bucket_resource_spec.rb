@@ -36,6 +36,21 @@ describe Chef::Resource::CouchbaseBucket do
     end
   end
 
+  describe "#cluster" do
+    it "can be assigned a String" do
+      resource.cluster "pillowfight"
+      resource.cluster.should == "pillowfight"
+    end
+
+    it "cannot be assigned an Integer" do
+      expect { resource.cluster 42 }.to raise_error Chef::Exceptions::ValidationFailed
+    end
+
+    it "defaults to 'default'" do
+      resource.cluster.should == "default"
+    end
+  end
+
   describe "#exists" do
     it "can be assigned true" do
       resource.exists true
@@ -82,9 +97,38 @@ describe Chef::Resource::CouchbaseBucket do
     it "cannot be assigned a negative number" do
       expect { resource.memory_quota_mb -1 }.to raise_error Chef::Exceptions::ValidationFailed, "Option memory_quota_mb's value -1 must be at least 100!"
     end
+  end
 
-    it "is required" do
-      expect { resource.memory_quota_mb }.to raise_error Chef::Exceptions::ValidationFailed
+  describe "#memory_quota_percent" do
+    it "can be assigned 1.0" do
+      resource.memory_quota_percent 1.0
+      resource.memory_quota_percent.should == 1.0
+    end
+
+    it "can be assigned 1" do
+      resource.memory_quota_percent 1
+      resource.memory_quota_percent.should == 1
+    end
+
+    it "cannot be assigned a String" do
+      expect { resource.memory_quota_percent "one" }.to raise_error Chef::Exceptions::ValidationFailed
+    end
+
+    it "cannot be assigned 0.0" do
+      expect { resource.memory_quota_percent 0.0 }.to raise_error Chef::Exceptions::ValidationFailed,
+      "Option memory_quota_percent's value 0.0 must be a positive number!"
+    end
+
+    it "cannot be assigned a numer greater than 1.0" do
+      number = 1.0 + rand
+      expect { resource.memory_quota_percent number }.to raise_error Chef::Exceptions::ValidationFailed,
+      "Option memory_quota_percent's value #{number} must be less than or equal to 1.0!"
+    end
+
+    it "cannot be assigned a negative number" do
+      negative_number = -rand
+      expect { resource.memory_quota_percent negative_number }.to raise_error Chef::Exceptions::ValidationFailed,
+      "Option memory_quota_percent's value #{negative_number} must be a positive number!"
     end
   end
 

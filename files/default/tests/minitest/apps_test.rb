@@ -68,6 +68,27 @@ describe_recipe "couchbase::apps" do
     end
   end
 
+  describe "the production percentage bucket" do
+    let :bucket do
+      couchbase_bucket("production_percent", {
+        :username => node["couchbase"]["username"],
+        :password => node["couchbase"]["password"],
+      })
+    end
+
+    it "exists" do
+      assert bucket.exists
+    end
+
+    it "has a 10% quota" do
+      bucket.must_have :memory_quota_mb, (node["couchbase"]["memory_quota_mb"] * 0.1).to_i
+    end
+
+    it "has 0 replicas" do
+      bucket.must_have :replicas, 0
+    end
+  end
+
   describe "the staging default bucket" do
     let :bucket do
       couchbase_bucket("staging_default", {

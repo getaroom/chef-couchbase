@@ -1,7 +1,7 @@
 shared_examples_for "a no op provider action" do
   it "does not POST to the Management REST API" do
     subject
-    a_request(:any, /.*/).should_not have_been_made
+    a_request(:post, /.*/).should_not have_been_made
   end
 
   it "does not update the new resource" do

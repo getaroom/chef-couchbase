@@ -26,9 +26,9 @@ describe_recipe "couchbase::test_buckets" do
     end
   end
 
-  describe "a modified bucket" do
+  describe "a modified bucket in MB" do
     let :bucket do
-      couchbase_bucket("modified", {
+      couchbase_bucket("modified_mb", {
         :username => node["couchbase"]["username"],
         :password => node["couchbase"]["password"],
       })
@@ -44,6 +44,23 @@ describe_recipe "couchbase::test_buckets" do
 
     it "has 0 replicas" do
       bucket.must_have :replicas, 0
+    end
+  end
+
+  describe "a modified bucket in %" do
+    let :bucket do
+      couchbase_bucket("modified_percent", {
+        :username => node["couchbase"]["username"],
+        :password => node["couchbase"]["password"],
+      })
+    end
+
+    it "exists" do
+      assert bucket.exists
+    end
+
+    it "has a 15% quota" do
+      bucket.must_have :memory_quota_mb, (node["couchbase"]["memory_quota_mb"] * 0.15).to_i
     end
   end
 end

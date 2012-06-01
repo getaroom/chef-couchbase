@@ -28,7 +28,12 @@ search :apps do |app|
   if (app['couchbase_role'] & node.run_list.roles).any?
     app['couchbase_buckets'].each do |environment, bucket|
       couchbase_bucket bucket['bucket'] do
-        memory_quota_mb bucket['memory_quota_mb']
+        if bucket['memory_quota_mb']
+          memory_quota_mb bucket['memory_quota_mb']
+        else
+          memory_quota_percent bucket['memory_quota_percent']
+        end
+
         replicas bucket['replicas'] if bucket.has_key? 'replicas'
 
         username node['couchbase']['username']
