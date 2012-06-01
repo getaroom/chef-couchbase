@@ -11,7 +11,7 @@ describe Chef::Provider::CouchbaseBucket do
   let :new_resource do
     stub({
       :name => "mah_bukkit",
-      :bucket_name => bucket_name,
+      :bucket => bucket_name,
       :username => "Administrator",
       :password => "password",
       :memory_quota_mb => 100,
@@ -29,7 +29,7 @@ describe Chef::Provider::CouchbaseBucket do
 
     context "when the bucket exists" do
       before do
-        stub_request(:get, "#{base_uri}/pools/default/buckets/#{new_resource.bucket_name}").
+        stub_request(:get, "#{base_uri}/pools/default/buckets/#{new_resource.bucket}").
         to_return(fixture("pools_default_buckets_default_exists.http"))
       end
 
@@ -39,8 +39,8 @@ describe Chef::Provider::CouchbaseBucket do
         current_resource.name.should == new_resource.name
       end
 
-      it "has the same bucket_name as the new resource" do
-        current_resource.bucket_name.should == new_resource.bucket_name
+      it "has the same bucket name as the new resource" do
+        current_resource.bucket.should == new_resource.bucket
       end
 
       it "populates exists with true" do
@@ -60,7 +60,7 @@ describe Chef::Provider::CouchbaseBucket do
       let(:bucket_name) { "nondefault" }
 
       before do
-        stub_request(:get, "#{base_uri}/pools/default/buckets/#{new_resource.bucket_name}").
+        stub_request(:get, "#{base_uri}/pools/default/buckets/#{new_resource.bucket}").
         to_return(fixture("pools_default_buckets_nondefault_exists.http"))
       end
 
@@ -70,8 +70,8 @@ describe Chef::Provider::CouchbaseBucket do
         current_resource.name.should == new_resource.name
       end
 
-      it "has the same bucket_name as the new resource" do
-        current_resource.bucket_name.should == new_resource.bucket_name
+      it "has the same bucket name as the new resource" do
+        current_resource.bucket.should == new_resource.bucket
       end
 
       it "populates exists with true" do
@@ -89,7 +89,7 @@ describe Chef::Provider::CouchbaseBucket do
 
     context "when the bucket does not exist" do
       before do
-        stub_request(:get, "#{base_uri}/pools/default/buckets/#{new_resource.bucket_name}").
+        stub_request(:get, "#{base_uri}/pools/default/buckets/#{new_resource.bucket}").
         to_return(fixture("pools_default_buckets_default_404.http"))
       end
 
@@ -99,8 +99,8 @@ describe Chef::Provider::CouchbaseBucket do
         current_resource.name.should == new_resource.name
       end
 
-      it "has the same bucket_name as the new resource" do
-        current_resource.bucket_name.should == new_resource.bucket_name
+      it "has the same bucket name as the new resource" do
+        current_resource.bucket.should == new_resource.bucket
       end
 
       it "populates exists with false" do
@@ -133,7 +133,7 @@ describe Chef::Provider::CouchbaseBucket do
     let :current_resource do
       stub({
         :name => new_resource.name,
-        :bucket_name => new_resource.bucket_name,
+        :bucket => new_resource.bucket,
         :exists => bucket_exists,
         :memory_quota_mb => current_memory_quota_mb,
         :replicas => current_replicas,
@@ -151,7 +151,7 @@ describe Chef::Provider::CouchbaseBucket do
             "authType" => "sasl",
             "saslPassword" => "",
             "bucketType" => "membase",
-            "name" => new_resource.bucket_name,
+            "name" => new_resource.bucket,
             "ramQuotaMB" => new_resource.memory_quota_mb.to_s,
             "replicaNumber" => new_resource.replicas.to_s,
           })).should have_been_made.once
@@ -180,7 +180,7 @@ describe Chef::Provider::CouchbaseBucket do
 
     context "when the bucket exists" do
       let(:bucket_exists) { true }
-      let!(:request) { stub_request(:post, "#{base_uri}/pools/default/buckets/#{new_resource.bucket_name}") }
+      let!(:request) { stub_request(:post, "#{base_uri}/pools/default/buckets/#{new_resource.bucket}") }
 
       context "when the bucket configuration exactly matches" do
         it_should_behave_like "a no op provider action"

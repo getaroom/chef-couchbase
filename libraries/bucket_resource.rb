@@ -6,7 +6,7 @@ class Chef
     class CouchbaseBucket < Resource
       include Couchbase::CredentialsAttributes
 
-      attribute :bucket_name, :kind_of => String, :name_attribute => true
+      attribute :bucket, :kind_of => String, :name_attribute => true
       attribute :exists, :kind_of => [TrueClass, FalseClass], :required => true
 
       attribute :memory_quota_mb, :kind_of => Integer, :required => true, :callbacks => {

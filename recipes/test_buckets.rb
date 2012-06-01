@@ -32,7 +32,7 @@ couchbase_bucket "default" do
 end
 
 couchbase_bucket "modified creation" do
-  bucket_name "modified"
+  bucket "modified"
   memory_quota_mb 100
   replicas false
 
@@ -47,7 +47,7 @@ ruby_block "wait for bucket creation, which is asynchronous" do
 end
 
 couchbase_bucket "modified modification" do
-  bucket_name "modified"
+  bucket "modified"
   memory_quota_mb 150
   replicas 2
 

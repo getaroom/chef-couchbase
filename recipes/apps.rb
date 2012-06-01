@@ -27,7 +27,7 @@
 search :apps do |app|
   if (app['couchbase_role'] & node.run_list.roles).any?
     app['couchbase_buckets'].each do |environment, bucket|
-      couchbase_bucket bucket['bucket_name'] do
+      couchbase_bucket bucket['bucket'] do
         memory_quota_mb bucket['memory_quota_mb']
         replicas bucket['replicas'] if bucket.has_key? 'replicas'
 

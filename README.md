@@ -52,12 +52,12 @@ Setup buckets from the apps data bag.
   "couchbase_role": ["couchbase_server"],
   "couchbase_buckets": {
     "production": {
-      "bucket_name": "pillowfight_production",
+      "bucket": "pillowfight_production",
       "memory_quota_mb": 1024,
       "replicas": 2
     },
     "staging": {
-      "bucket_name": "pillowfight_staging",
+      "bucket": "pillowfight_staging",
       "memory_quota_mb": 256,
       "replicas": false
     }
@@ -155,7 +155,7 @@ couchbase_bucket
 
 ### Attribute Parameters
 
-* `bucket_name` - The name to use for the Couchbase bucket, defaults to the resource name
+* `bucket` - The name to use for the Couchbase bucket, defaults to the resource name
 * `memory_quota_mb` - The bucket's per server RAM quota for the entire cluster in megabytes
 * `replicas` - Number of replica (backup) copies, defaults to 1. Set to false to disable
 * `username` - The username to use to authenticate with Couchbase

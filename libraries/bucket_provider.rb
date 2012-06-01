@@ -8,7 +8,7 @@ class Chef
 
       def load_current_resource
         @current_resource = Resource::CouchbaseBucket.new @new_resource.name
-        @current_resource.bucket_name @new_resource.bucket_name
+        @current_resource.bucket @new_resource.bucket
         @current_resource.exists !!bucket_data
 
         if @current_resource.exists
@@ -34,7 +34,7 @@ class Chef
       end
 
       def modify_bucket
-        post "/pools/default/buckets/#{@new_resource.bucket_name}", modify_params
+        post "/pools/default/buckets/#{@new_resource.bucket}", modify_params
         new_resource.updated_by_last_action true
         Chef::Log.info "#{new_resource} memory_quota_mb changed to #{@new_resource.memory_quota_mb}"
       end
@@ -44,7 +44,7 @@ class Chef
           "authType" => "sasl",
           "saslPassword" => "",
           "bucketType" => "membase",
-          "name" => new_resource.bucket_name,
+          "name" => new_resource.bucket,
           "ramQuotaMB" => new_resource.memory_quota_mb,
           "replicaNumber" => new_resource.replicas || 0,
         }
@@ -68,7 +68,7 @@ class Chef
         return @bucket_data if instance_variable_defined? "@bucket_data"
 
         @bucket_data ||= begin
-          response = get "/pools/default/buckets/#{@new_resource.bucket_name}"
+          response = get "/pools/default/buckets/#{@new_resource.bucket}"
           response.error! unless response.kind_of?(Net::HTTPSuccess) || response.kind_of?(Net::HTTPNotFound)
           JSONCompat.from_json response.body if response.kind_of? Net::HTTPSuccess
         end

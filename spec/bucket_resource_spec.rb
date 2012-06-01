@@ -21,18 +21,18 @@ describe Chef::Resource::CouchbaseBucket do
     it { should include :nothing }
   end
 
-  describe "#bucket_name" do
+  describe "#bucket" do
     it "can be assigned a String" do
-      resource.bucket_name "default"
-      resource.bucket_name.should == "default"
+      resource.bucket "default"
+      resource.bucket.should == "default"
     end
 
     it "cannot be assigned an Integer" do
-      expect { resource.bucket_name 42 }.to raise_error Chef::Exceptions::ValidationFailed
+      expect { resource.bucket 42 }.to raise_error Chef::Exceptions::ValidationFailed
     end
 
     it "defaults to the name attribute" do
-      resource.bucket_name.should == resource.name
+      resource.bucket.should == resource.name
     end
   end
 
