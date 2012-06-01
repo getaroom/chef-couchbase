@@ -41,18 +41,18 @@ describe Chef::Resource::CouchbaseCluster do
     end
   end
 
-  describe "#id" do
+  describe "#cluster" do
     it "can be assigned" do
-      resource.id "new_pool"
-      resource.id.should == "new_pool"
+      resource.cluster "new_pool"
+      resource.cluster.should == "new_pool"
     end
 
     it "cannot be assigned an Integer" do
-      expect { resource.id 42 }.to raise_error Chef::Exceptions::ValidationFailed
+      expect { resource.cluster 42 }.to raise_error Chef::Exceptions::ValidationFailed
     end
 
     it "defaults to the name attribute" do
-      resource.id.should == resource.name
+      resource.cluster.should == resource.name
     end
   end
 

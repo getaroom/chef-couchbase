@@ -9,7 +9,7 @@ describe Chef::Provider::CouchbaseCluster do
   let :new_resource do
     stub({
       :name => "my new pool",
-      :id => "default",
+      :cluster => "default",
       :username => "Administrator",
       :password => "password",
       :memory_quota_mb => 256,
@@ -33,8 +33,8 @@ describe Chef::Provider::CouchbaseCluster do
         current_resource.name.should == new_resource.name
       end
 
-      it "has the same id as the new resource" do
-        current_resource.id.should == new_resource.id
+      it "has the same cluster as the new resource" do
+        current_resource.cluster.should == new_resource.cluster
       end
 
       it "populates the memory_quota_mb" do
@@ -55,8 +55,8 @@ describe Chef::Provider::CouchbaseCluster do
         current_resource.name.should == new_resource.name
       end
 
-      it "has the same id as the new resource" do
-        current_resource.id.should == new_resource.id
+      it "has the same cluster as the new resource" do
+        current_resource.cluster.should == new_resource.cluster
       end
 
       it "does not populate the memory_quota_mb" do
@@ -82,7 +82,7 @@ describe Chef::Provider::CouchbaseCluster do
 
     before do
       provider.current_resource = stub({
-        :id => "default",
+        :cluster => "default",
         :memory_quota_mb => memory_quota_mb,
         :exists => cluster_exists,
       })

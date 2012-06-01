@@ -102,7 +102,7 @@ couchbase_cluster
 
 ### Attribute Parameters
 
-* `id` - The id of the Couchbase cluster, typically "default", defaults to the resource name
+* `cluster` - The id of the Couchbase cluster, typically "default", defaults to the resource name
 * `memory_quota_mb` - The per server RAM quota for the entire cluster in megabytes
 * `username` - The username to use to authenticate with Couchbase
 * `password` - The password to use to authenticate with Couchbase
