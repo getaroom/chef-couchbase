@@ -13,3 +13,4 @@ supports "ubuntu"
 
 recipe "couchbase::server", "Installs couchbase-server"
 recipe "couchbase::logrotate", "Configure logrotation for couchbase-server"
+recipe "couchbase::apps", "Setup buckets from the apps data bag"

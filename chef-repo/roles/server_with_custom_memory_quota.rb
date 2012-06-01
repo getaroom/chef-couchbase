@@ -2,14 +2,11 @@ name "server_with_custom_memory_quota"
 description "Test for server recipe"
 
 run_list(
-  "recipe[couchbase::server]",
-  "recipe[couchbase::test_buckets]",
-  "recipe[minitest-handler]",
+  "role[server]",
 )
 
 default_attributes({
   "couchbase" => {
-    "memory_quota_mb" => 257,
-    "password" => "password",
+    "memory_quota_mb" => 700,
   },
 })

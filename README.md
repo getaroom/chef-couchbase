@@ -39,6 +39,32 @@ logrotate
 
 Configures log rotation for couchbase-server.
 
+apps
+----
+
+Setup buckets from the apps data bag.
+
+### Example Data Bag Item
+
+```json
+{
+  "id": "pillowfight",
+  "couchbase_role": ["couchbase_server"],
+  "couchbase_buckets": {
+    "production": {
+      "bucket_name": "pillowfight_production",
+      "memory_quota_mb": 1024,
+      "replicas": 2
+    },
+    "staging": {
+      "bucket_name": "pillowfight_staging",
+      "memory_quota_mb": 256,
+      "replicas": false
+    }
+  }
+}
+```
+
 RESOURCES/PROVIDERS
 ===================
 
@@ -51,7 +77,7 @@ couchbase_node
 
 ### Attribute Parameters
 
-* `id` - The id of the Couchbase node, typically "self"
+* `id` - The id of the Couchbase node, typically "self", defaults to the resource name
 * `database_path` - The directory the Couchbase node should persist data to
 * `username` - The username to use to authenticate with Couchbase
 * `password` - The password to use to authenticate with Couchbase
@@ -76,7 +102,7 @@ couchbase_cluster
 
 ### Attribute Parameters
 
-* `id` - The id of the Couchbase cluster, typically "default"
+* `id` - The id of the Couchbase cluster, typically "default", defaults to the resource name
 * `memory_quota_mb` - The per server RAM quota for the entire cluster in megabytes
 * `username` - The username to use to authenticate with Couchbase
 * `password` - The password to use to authenticate with Couchbase
@@ -101,7 +127,7 @@ couchbase_settings
 
 ### Attribute Parameters
 
-* `group` - Which group of settings to modify
+* `group` - Which group of settings to modify, defaults to the resource name
 * `settings` - The hash of settings to modify
 * `username` - The username to use to authenticate with Couchbase
 * `password` - The password to use to authenticate with Couchbase
@@ -129,8 +155,9 @@ couchbase_bucket
 
 ### Attribute Parameters
 
-* `replicas` - Number of replica (backup) copies, defaults to 1. Set to false to disable
+* `bucket_name` - The name to use for the Couchbase bucket, defaults to the resource name
 * `memory_quota_mb` - The bucket's per server RAM quota for the entire cluster in megabytes
+* `replicas` - Number of replica (backup) copies, defaults to 1. Set to false to disable
 * `username` - The username to use to authenticate with Couchbase
 * `password` - The password to use to authenticate with Couchbase
 

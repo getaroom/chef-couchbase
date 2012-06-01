@@ -1,9 +1,10 @@
-name "server_and_buckets"
-description "Test for server recipe and bucket resource/provider"
+name "server"
+description "Tests for Couchbase server"
 
 run_list(
   "recipe[couchbase::server]",
   "recipe[couchbase::test_buckets]",
+  "recipe[couchbase::apps]",
   "recipe[minitest-handler]",
 )
 

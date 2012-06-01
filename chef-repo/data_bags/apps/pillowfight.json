@@ -1,0 +1,24 @@
+{
+  "id": "pillowfight",
+  "couchbase_role": ["server"],
+  "couchbase_buckets": {
+    "production": {
+      "bucket_name": "production_default",
+      "memory_quota_mb": 100
+    },
+    "production_not_replicated": {
+      "bucket_name": "production_not_replicated",
+      "replicas": false,
+      "memory_quota_mb": 150
+    },
+    "production_replicated": {
+      "bucket_name": "production_replicated",
+      "replicas": 2,
+      "memory_quota_mb": 200
+    },
+    "staging": {
+      "bucket_name": "staging_default",
+      "memory_quota_mb": 100
+    }
+  }
+}
