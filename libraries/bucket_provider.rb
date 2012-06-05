@@ -64,7 +64,7 @@ class Chef
       end
 
       def bucket_memory_quota_mb
-        bucket_data["quota"]["rawRAM"] / 1024 / 1024
+        (bucket_data["quota"]["rawRAM"] / 1024 / 1024).to_i
       end
 
       def bucket_replicas

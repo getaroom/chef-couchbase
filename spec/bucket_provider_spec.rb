@@ -301,4 +301,13 @@ describe Chef::Provider::CouchbaseBucket do
       end
     end
   end
+
+  describe "#bucket_memory_quota_mb" do
+    let(:bucket_data) { { "quota" => { "rawRAM" => 134217728.0 } } }
+
+    it "returns an Integer" do
+      provider.instance_variable_set(:@bucket_data, bucket_data)
+      provider.send(:bucket_memory_quota_mb).should be_a_kind_of(Integer)
+    end
+  end
 end
