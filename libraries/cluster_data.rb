@@ -3,7 +3,7 @@ module Couchbase
     private
 
     def pool_memory_quota_mb
-      (pool_data["storageTotals"]["ram"]["quotaTotal"] / 1024 / 1024).to_i
+      (pool_data["storageTotals"]["ram"]["quotaTotal"] / pool_data["nodes"].size / 1024 / 1024).to_i
     end
 
     def pool_data

@@ -12,10 +12,10 @@ Cache-Control: no-cache
         "ram":
         {
             "quotaUsed":134217728,
-            "usedByData":27280096,
-            "total":4138164000.0,
-            "quotaTotal":1073741824,
-            "used":4046856000.0
+            "usedByData":54560192,
+            "total":8276328000.0,
+            "quotaTotal":2147483648.0,
+            "used":8093712000.0
         },
         "hdd":
         {
@@ -53,6 +53,36 @@ Cache-Control: no-cache
             "clusterMembership":"active",
             "status":"healthy",
             "hostname":"127.0.0.1:8091",
+            "clusterCompatibility":1,
+            "version":"1.8.0r_74_g85f643d-community",
+            "os":"i386-apple-darwin10.8.0",
+            "ports":
+            {
+                "proxy":11211,
+                "direct":11210
+            }
+        },
+        {
+            "systemStats":
+            {
+                "cpu_utilization_rate":3.2418952618453867,
+                "swap_total":268435456,
+                "swap_used":32849920
+            },
+            "interestingStats":
+            {
+                "curr_items":0,
+                "curr_items_tot":0,
+                "vb_replica_curr_items":0
+            },
+            "uptime":"170861",
+            "memoryTotal":4138164000.0,
+            "memoryFree":91308000,
+            "mcdMemoryReserved":3157,
+            "mcdMemoryAllocated":3157,
+            "clusterMembership":"active",
+            "status":"healthy",
+            "hostname":"10.0.1.20:8091",
             "clusterCompatibility":1,
             "version":"1.8.0r_74_g85f643d-community",
             "os":"i386-apple-darwin10.8.0",
