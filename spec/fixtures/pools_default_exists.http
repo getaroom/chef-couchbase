@@ -14,7 +14,7 @@ Cache-Control: no-cache
             "quotaUsed":134217728,
             "usedByData":27280096,
             "total":4138164000.0,
-            "quotaTotal":268435456,
+            "quotaTotal":268435456.0,
             "used":4046856000.0
         },
         "hdd":

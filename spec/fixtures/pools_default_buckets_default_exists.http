@@ -71,8 +71,8 @@ Cache-Control: no-cache
     "replicaNumber":2,
     "quota":
     {
-        "ram":134217728,
-        "rawRAM":134217728
+        "ram":134217728.0,
+        "rawRAM":134217728.0
     },
     "basicStats":
     {

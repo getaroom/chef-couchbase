@@ -136,12 +136,4 @@ describe Chef::Provider::CouchbaseCluster do
       it_should_behave_like "a no op provider action"
     end
   end
-  describe "#pool_memory_quota_mb" do
-    let(:pool_data) { { "storageTotals" => { "ram" => { "quotaTotal" => 268435456.0 } } } }
-
-    it "returns an Integer" do
-      provider.instance_variable_set(:@pool_data, pool_data)
-      provider.send(:pool_memory_quota_mb).should be_a_kind_of(Integer)
-    end
-  end
 end
