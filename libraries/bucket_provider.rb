@@ -15,6 +15,7 @@ class Chef
         @current_resource.exists !!bucket_data
 
         if @current_resource.exists
+          @current_resource.type bucket_type
           @current_resource.memory_quota_mb bucket_memory_quota_mb
           @current_resource.replicas bucket_replicas
         end
@@ -46,11 +47,15 @@ class Chef
         {
           "authType" => "sasl",
           "saslPassword" => "",
-          "bucketType" => "membase",
+          "bucketType" => new_api_type,
           "name" => new_resource.bucket,
           "ramQuotaMB" => new_memory_quota_mb,
           "replicaNumber" => new_resource.replicas || 0,
         }
+      end
+
+      def new_api_type
+        new_resource.type == "couchbase" ? "membase" : new_resource.type
       end
 
       def modify_params
@@ -69,6 +74,10 @@ class Chef
 
       def bucket_replicas
         bucket_data["replicaNumber"]
+      end
+
+      def bucket_type
+        bucket_data["bucketType"] == "membase" ? "couchbase" : bucket_data["bucketType"]
       end
 
       def bucket_data

@@ -31,8 +31,17 @@ couchbase_bucket "default" do
   password node['couchbase']['password']
 end
 
+couchbase_bucket "memcached" do
+  memory_quota_mb 100
+  type "memcached"
+
+  username node['couchbase']['username']
+  password node['couchbase']['password']
+end
+
 couchbase_bucket "modified mb creation" do
   bucket "modified_mb"
+  type "couchbase"
   memory_quota_mb 100
   replicas false
 
@@ -42,6 +51,7 @@ end
 
 couchbase_bucket "modified % creation" do
   bucket "modified_percent"
+  type "couchbase"
   memory_quota_percent 0.1
 
   username node['couchbase']['username']
@@ -56,7 +66,8 @@ end
 
 couchbase_bucket "modified mb modification" do
   bucket "modified_mb"
-  memory_quota_mb 150
+  type "couchbase"
+  memory_quota_mb 125
   replicas 2
 
   username node['couchbase']['username']
@@ -65,7 +76,8 @@ end
 
 couchbase_bucket "modified % modification" do
   bucket "modified_percent"
-  memory_quota_percent 0.15
+  type "couchbase"
+  memory_quota_percent 0.125
 
   username node['couchbase']['username']
   password node['couchbase']['password']

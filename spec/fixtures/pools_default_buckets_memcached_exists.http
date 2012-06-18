@@ -1,0 +1,82 @@
+HTTP/1.1 200 OK
+Server: Couchbase Server 2.0.0dp4-722-rel-community
+Pragma: no-cache
+Date: Fri, 15 Jun 2012 22:02:10 GMT
+Content-Type: application/json
+Cache-Control: no-cache
+
+
+{
+    "name":"memcached",
+    "bucketType":"memcached",
+    "authType":"sasl",
+    "saslPassword":"",
+    "proxyPort":0,
+    "replicaIndex":true,
+    "uri":"/pools/default/buckets/memcached",
+    "streamingUri":"/pools/default/bucketsStreaming/memcached",
+    "flushCacheUri":"/pools/default/buckets/memcached/controller/doFlush",
+    "nodes":
+    [
+        {
+            "systemStats":
+            {
+                "cpu_utilization_rate":3.254067584480601,
+                "swap_total":67108864,
+                "swap_used":0
+            },
+            "interestingStats":
+            {
+                "curr_items":0,
+                "curr_items_tot":0,
+                "vb_replica_curr_items":0
+            },
+            "uptime":"280015",
+            "memoryTotal":15849116000,
+            "memoryFree":7228448000,
+            "mcdMemoryReserved":12091,
+            "mcdMemoryAllocated":12091,
+            "couchApiBase":"http://127.0.0.1:8092/memcached",
+            "replication":1.0,
+            "clusterMembership":"active",
+            "status":"healthy",
+            "thisNode":true,
+            "hostname":"127.0.0.1:8091",
+            "clusterCompatibility":1,
+            "version":"2.0.0dp4-722-rel-community",
+            "os":"i386-apple-darwin10.8.0",
+            "ports":
+            {
+                "proxy":11211,
+                "direct":11210
+            }
+        }
+    ],
+    "stats":
+    {
+        "uri":"/pools/default/buckets/memcached/stats",
+        "directoryURI":"/pools/default/buckets/memcached/statsDirectory",
+        "nodeStatsListURI":"/pools/default/buckets/memcached/nodes"
+    },
+    "nodeLocator":"ketama",
+    "autoCompactionSettings":false,
+    "replicaNumber":0,
+    "quota":
+    {
+        "ram":1073741824,
+        "rawRAM":536870912
+    },
+    "basicStats":
+    {
+        "quotaPercentUsed":0.0,
+        "opsPerSec":0,
+        "hitRatio":0,
+        "itemCount":0,
+        "diskUsed":72,
+        "memUsed":0
+    },
+    "bucketCapabilitiesVer":"",
+    "bucketCapabilities":
+    [
+    ]
+}

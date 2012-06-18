@@ -28,6 +28,8 @@ search :apps do |app|
   if (app['couchbase_role'] & node.run_list.roles).any?
     app['couchbase_buckets'].each do |environment, bucket|
       couchbase_bucket bucket['bucket'] do
+        type bucket['type'] if bucket['type']
+
         if bucket['memory_quota_mb']
           memory_quota_mb bucket['memory_quota_mb']
         else

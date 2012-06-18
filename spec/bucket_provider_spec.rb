@@ -6,6 +6,7 @@ describe Chef::Provider::CouchbaseBucket do
   let(:provider) { described_class.new new_resource, stub("run_context") }
   let(:base_uri) { "#{new_resource.username}:#{new_resource.password}@localhost:8091" }
   let(:bucket_name) { "default" }
+  let(:new_bucket_type) { "couchbase" }
   let(:new_replicas) { 1 }
   let(:new_memory_quota_mb) { 100 }
   let(:new_memory_quota_percent) { nil }
@@ -14,6 +15,7 @@ describe Chef::Provider::CouchbaseBucket do
     stub({
       :name => "mah_bukkit",
       :bucket => bucket_name,
+      :type => new_bucket_type,
       :cluster => "default_#{SecureRandom.hex(2)}",
       :username => "Administrator",
       :password => "password",
@@ -31,10 +33,10 @@ describe Chef::Provider::CouchbaseBucket do
   describe "#current_resource" do
     let(:current_resource) { provider.tap(&:load_current_resource).current_resource }
 
-    context "when the bucket exists" do
+    context "when a couchbase bucket exists" do
       before do
         stub_request(:get, "#{base_uri}/pools/#{new_resource.cluster}/buckets/#{new_resource.bucket}").
-        to_return(fixture("pools_default_buckets_default_exists.http"))
+        to_return(fixture("pools_default_buckets_couchbase_exists.http"))
       end
 
       it { current_resource.should be_a_kind_of Chef::Resource::CouchbaseBucket }
@@ -62,14 +64,18 @@ describe Chef::Provider::CouchbaseBucket do
       it "populates the replicas" do
         current_resource.replicas.should == 2
       end
+
+      it "populates the type" do
+        current_resource.type.should == "couchbase"
+      end
     end
 
-    context "when another bucket exists" do
-      let(:bucket_name) { "nondefault" }
+    context "when a memcached bucket exists" do
+      let(:bucket_name) { "memcached" }
 
       before do
         stub_request(:get, "#{base_uri}/pools/#{new_resource.cluster}/buckets/#{new_resource.bucket}").
-        to_return(fixture("pools_default_buckets_nondefault_exists.http"))
+        to_return(fixture("pools_default_buckets_memcached_exists.http"))
       end
 
       it { current_resource.should be_a_kind_of Chef::Resource::CouchbaseBucket }
@@ -96,6 +102,10 @@ describe Chef::Provider::CouchbaseBucket do
 
       it "populates the replicas" do
         current_resource.replicas.should == 0
+      end
+
+      it "populates the type" do
+        current_resource.type.should == "memcached"
       end
     end
 
@@ -221,6 +231,31 @@ describe Chef::Provider::CouchbaseBucket do
               request.with(:body => hash_including("ramQuotaMB" => "512")).should have_been_made.once
             end
           end
+        end
+      end
+
+      context "and the bucket type is memcached" do
+        let(:new_bucket_type) { "memcached" }
+
+        it "POSTs to the Management REST API to create the bucket" do
+          provider.action_create
+          request.with(:body => hash_including({
+            "authType" => "sasl",
+            "saslPassword" => "",
+            "bucketType" => "memcached",
+            "name" => new_resource.bucket,
+            "ramQuotaMB" => new_resource.memory_quota_mb.to_s,
+          })).should have_been_made.once
+        end
+
+        it "updates the new resource" do
+          new_resource.should_receive(:updated_by_last_action).with(true)
+          provider.action_create
+        end
+
+        it "logs the creation" do
+          Chef::Log.should_receive(:info).with(/created/)
+          provider.action_create
         end
       end
     end

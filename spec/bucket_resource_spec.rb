@@ -173,4 +173,23 @@ describe Chef::Resource::CouchbaseBucket do
     subject { resource.resource_name }
     it { should == :couchbase_bucket }
   end
+
+  describe "#type" do
+    it "can be assigned memcached" do
+      resource.type "memcached"
+      resource.type.should == "memcached"
+    end
+
+    it "cannot be assigned an Integer" do
+      expect { resource.type 42 }.to raise_error Chef::Exceptions::ValidationFailed
+    end
+
+    it "defaults to couchbase" do
+      resource.type.should == "couchbase"
+    end
+
+    it "cannot be assigned memcache" do
+      expect { resource.type "memcache" }.to raise_error Chef::Exceptions::ValidationFailed, "Option type's value memcache must be either couchbase or memcached!"
+    end
+  end
 end

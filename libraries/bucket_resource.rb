@@ -11,7 +11,7 @@ class Chef
       attribute :exists, :kind_of => [TrueClass, FalseClass], :required => true
 
       attribute :memory_quota_mb, :kind_of => Integer, :callbacks => {
-        "must be at least 100" => lambda { |quota| quota >= 100 }
+        "must be at least 100" => lambda { |quota| quota >= 100 },
       }
 
       attribute :memory_quota_percent, :kind_of => Numeric, :callbacks => {
@@ -20,7 +20,11 @@ class Chef
       }
 
       attribute :replicas, :kind_of => [Integer, FalseClass], :default => 1, :callbacks => {
-        "must be a non-negative integer" => lambda { |replicas| !replicas || replicas > -1 }
+        "must be a non-negative integer" => lambda { |replicas| !replicas || replicas > -1 },
+      }
+
+      attribute :type, :kind_of => String, :default => "couchbase", :callbacks => {
+        "must be either couchbase or memcached" => lambda { |type| %w(couchbase memcached).include? type },
       }
 
       def initialize(*)

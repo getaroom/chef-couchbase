@@ -17,6 +17,10 @@ describe_recipe "couchbase::apps" do
       assert bucket.exists
     end
 
+    it "is of type couchbase" do
+      bucket.must_have :type, "couchbase"
+    end
+
     it "has a 100MB quota" do
       bucket.must_have :memory_quota_mb, 100
     end
@@ -38,8 +42,12 @@ describe_recipe "couchbase::apps" do
       assert bucket.exists
     end
 
-    it "has a 150MB quota" do
-      bucket.must_have :memory_quota_mb, 150
+    it "is of type couchbase" do
+      bucket.must_have :type, "couchbase"
+    end
+
+    it "has a 125MB quota" do
+      bucket.must_have :memory_quota_mb, 125
     end
 
     it "has 0 replicas" do
@@ -59,8 +67,12 @@ describe_recipe "couchbase::apps" do
       assert bucket.exists
     end
 
-    it "has a 200MB quota" do
-      bucket.must_have :memory_quota_mb, 200
+    it "is of type couchbase" do
+      bucket.must_have :type, "couchbase"
+    end
+
+    it "has a 125MB quota" do
+      bucket.must_have :memory_quota_mb, 125
     end
 
     it "has 2 replicas" do
@@ -80,12 +92,37 @@ describe_recipe "couchbase::apps" do
       assert bucket.exists
     end
 
+    it "is of type couchbase" do
+      bucket.must_have :type, "couchbase"
+    end
+
     it "has a 10% quota" do
       bucket.must_have :memory_quota_mb, (node["couchbase"]["memory_quota_mb"] * 0.1).to_i
     end
 
     it "has 0 replicas" do
       bucket.must_have :replicas, 0
+    end
+  end
+
+  describe "the production memcached bucket" do
+    let :bucket do
+      couchbase_bucket("production_memcached", {
+        :username => node["couchbase"]["username"],
+        :password => node["couchbase"]["password"],
+      })
+    end
+
+    it "exists" do
+      assert bucket.exists
+    end
+
+    it "is of type memcached" do
+      bucket.must_have :type, "memcached"
+    end
+
+    it "has a 100MB quota" do
+      bucket.must_have :memory_quota_mb, 100
     end
   end
 
