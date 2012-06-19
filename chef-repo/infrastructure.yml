@@ -1,5 +1,4 @@
 cookbooks:
-- logrotate:
 - couchbase:
 - chef_handler:
 - minitest-handler:

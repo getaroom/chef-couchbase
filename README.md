@@ -34,11 +34,6 @@ server
 
 Installs the couchbase-server package and starts the couchbase-server service.
 
-logrotate
----------
-
-Configures log rotation for couchbase-server.
-
 apps
 ----
 
