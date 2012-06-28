@@ -24,12 +24,12 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-remote_file File.join(Chef::Config[:file_cache_path], node['couchbase']['package_file']) do
-  source node['couchbase']['package_full_url']
+remote_file File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file']) do
+  source node['couchbase']['server']['package_full_url']
   action :create_if_missing
 end
 
-package File.join(Chef::Config[:file_cache_path], node['couchbase']['package_file']) do
+package File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file']) do
   provider value_for_platform({
     %w(debian ubuntu) => { :default => Chef::Provider::Package::Dpkg },
     %w(redhat centos scientific amazon") => { :default => Chef::Provider::Package::Rpm },
@@ -41,7 +41,7 @@ service "couchbase-server" do
   action [:enable, :start]
 end
 
-directory node['couchbase']['log_dir'] do
+directory node['couchbase']['server']['log_dir'] do
   owner "couchbase"
   group "couchbase"
   mode 0755
@@ -49,7 +49,7 @@ directory node['couchbase']['log_dir'] do
 end
 
 ruby_block "rewrite_couchbase_log_dir_config" do
-  log_dir_line = %{{error_logger_mf_dir, "#{node['couchbase']['log_dir']}"}.}
+  log_dir_line = %{{error_logger_mf_dir, "#{node['couchbase']['server']['log_dir']}"}.}
 
   block do
     file = Chef::Util::FileEdit.new("/opt/couchbase/etc/couchbase/static_config")
@@ -61,7 +61,7 @@ ruby_block "rewrite_couchbase_log_dir_config" do
   not_if "grep '#{log_dir_line}' /opt/couchbase/etc/couchbase/static_config"
 end
 
-directory node['couchbase']['database_path'] do
+directory node['couchbase']['server']['database_path'] do
   owner "couchbase"
   group "couchbase"
   mode 0755
@@ -69,26 +69,26 @@ directory node['couchbase']['database_path'] do
 end
 
 couchbase_node "self" do
-  database_path node['couchbase']['database_path']
+  database_path node['couchbase']['server']['database_path']
 
-  username node['couchbase']['username']
-  password node['couchbase']['password']
+  username node['couchbase']['server']['username']
+  password node['couchbase']['server']['password']
 end
 
 couchbase_cluster "default" do
-  memory_quota_mb node['couchbase']['memory_quota_mb']
+  memory_quota_mb node['couchbase']['server']['memory_quota_mb']
 
-  username node['couchbase']['username']
-  password node['couchbase']['password']
+  username node['couchbase']['server']['username']
+  password node['couchbase']['server']['password']
 end
 
 couchbase_settings "web" do
   settings({
-    "username" => node['couchbase']['username'],
-    "password" => node['couchbase']['password'],
+    "username" => node['couchbase']['server']['username'],
+    "password" => node['couchbase']['server']['password'],
     "port" => 8091,
   })
 
-  username node['couchbase']['username']
-  password node['couchbase']['password']
+  username node['couchbase']['server']['username']
+  password node['couchbase']['server']['password']
 end

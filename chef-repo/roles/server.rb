@@ -10,6 +10,8 @@ run_list(
 
 default_attributes({
   "couchbase" => {
-    "password" => "password",
+    "server" => {
+      "password" => "password",
+    },
   },
 })

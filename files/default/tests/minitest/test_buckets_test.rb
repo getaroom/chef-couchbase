@@ -8,8 +8,8 @@ describe_recipe "couchbase::test_buckets" do
   describe "a default bucket" do
     let :bucket do
       couchbase_bucket("default", {
-        :username => node["couchbase"]["username"],
-        :password => node["couchbase"]["password"],
+        :username => node["couchbase"]["server"]["username"],
+        :password => node["couchbase"]["server"]["password"],
       })
     end
 
@@ -33,8 +33,8 @@ describe_recipe "couchbase::test_buckets" do
   describe "a memcached bucket" do
     let :bucket do
       couchbase_bucket("memcached", {
-        :username => node["couchbase"]["username"],
-        :password => node["couchbase"]["password"],
+        :username => node["couchbase"]["server"]["username"],
+        :password => node["couchbase"]["server"]["password"],
       })
     end
 
@@ -54,8 +54,8 @@ describe_recipe "couchbase::test_buckets" do
   describe "a modified bucket in MB" do
     let :bucket do
       couchbase_bucket("modified_mb", {
-        :username => node["couchbase"]["username"],
-        :password => node["couchbase"]["password"],
+        :username => node["couchbase"]["server"]["username"],
+        :password => node["couchbase"]["server"]["password"],
       })
     end
 
@@ -79,8 +79,8 @@ describe_recipe "couchbase::test_buckets" do
   describe "a modified bucket in %" do
     let :bucket do
       couchbase_bucket("modified_percent", {
-        :username => node["couchbase"]["username"],
-        :password => node["couchbase"]["password"],
+        :username => node["couchbase"]["server"]["username"],
+        :password => node["couchbase"]["server"]["password"],
       })
     end
 
@@ -93,7 +93,7 @@ describe_recipe "couchbase::test_buckets" do
     end
 
     it "has a 12.5% quota" do
-      bucket.must_have :memory_quota_mb, (node["couchbase"]["memory_quota_mb"] * 0.125).to_i
+      bucket.must_have :memory_quota_mb, (node["couchbase"]["server"]["memory_quota_mb"] * 0.125).to_i
     end
   end
 end

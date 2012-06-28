@@ -38,8 +38,8 @@ search :apps do |app|
 
         replicas bucket['replicas'] if bucket.has_key? 'replicas'
 
-        username node['couchbase']['username']
-        password node['couchbase']['password']
+        username node['couchbase']['server']['username']
+        password node['couchbase']['server']['password']
       end if environment.include? node.chef_environment
     end
   end

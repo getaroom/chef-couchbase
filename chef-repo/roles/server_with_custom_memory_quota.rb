@@ -7,6 +7,8 @@ run_list(
 
 default_attributes({
   "couchbase" => {
-    "memory_quota_mb" => 1000,
+    "server" => {
+      "memory_quota_mb" => 1000,
+    },
   },
 })

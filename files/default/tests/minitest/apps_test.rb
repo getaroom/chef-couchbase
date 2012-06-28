@@ -8,8 +8,8 @@ describe_recipe "couchbase::apps" do
   describe "the production default bucket" do
     let :bucket do
       couchbase_bucket("production_default", {
-        :username => node["couchbase"]["username"],
-        :password => node["couchbase"]["password"],
+        :username => node["couchbase"]["server"]["username"],
+        :password => node["couchbase"]["server"]["password"],
       })
     end
 
@@ -33,8 +33,8 @@ describe_recipe "couchbase::apps" do
   describe "the production not replicated bucket" do
     let :bucket do
       couchbase_bucket("production_not_replicated", {
-        :username => node["couchbase"]["username"],
-        :password => node["couchbase"]["password"],
+        :username => node["couchbase"]["server"]["username"],
+        :password => node["couchbase"]["server"]["password"],
       })
     end
 
@@ -58,8 +58,8 @@ describe_recipe "couchbase::apps" do
   describe "the production replicated bucket" do
     let :bucket do
       couchbase_bucket("production_replicated", {
-        :username => node["couchbase"]["username"],
-        :password => node["couchbase"]["password"],
+        :username => node["couchbase"]["server"]["username"],
+        :password => node["couchbase"]["server"]["password"],
       })
     end
 
@@ -83,8 +83,8 @@ describe_recipe "couchbase::apps" do
   describe "the production percentage bucket" do
     let :bucket do
       couchbase_bucket("production_percent", {
-        :username => node["couchbase"]["username"],
-        :password => node["couchbase"]["password"],
+        :username => node["couchbase"]["server"]["username"],
+        :password => node["couchbase"]["server"]["password"],
       })
     end
 
@@ -97,7 +97,7 @@ describe_recipe "couchbase::apps" do
     end
 
     it "has a 10% quota" do
-      bucket.must_have :memory_quota_mb, (node["couchbase"]["memory_quota_mb"] * 0.1).to_i
+      bucket.must_have :memory_quota_mb, (node["couchbase"]["server"]["memory_quota_mb"] * 0.1).to_i
     end
 
     it "has 0 replicas" do
@@ -108,8 +108,8 @@ describe_recipe "couchbase::apps" do
   describe "the production memcached bucket" do
     let :bucket do
       couchbase_bucket("production_memcached", {
-        :username => node["couchbase"]["username"],
-        :password => node["couchbase"]["password"],
+        :username => node["couchbase"]["server"]["username"],
+        :password => node["couchbase"]["server"]["password"],
       })
     end
 
@@ -129,8 +129,8 @@ describe_recipe "couchbase::apps" do
   describe "the staging default bucket" do
     let :bucket do
       couchbase_bucket("staging_default", {
-        :username => node["couchbase"]["username"],
-        :password => node["couchbase"]["password"],
+        :username => node["couchbase"]["server"]["username"],
+        :password => node["couchbase"]["server"]["password"],
       })
     end
 
