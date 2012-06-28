@@ -1,9 +1,10 @@
 source "https://rubygems.org"
 
 gem "activesupport"
-gem "chef", "~> 0.10.10"
-gem "foodcritic", "1.3.1"
+gem "chef"
+gem "foodcritic", "!= 1.4.0" # https://github.com/acrmp/foodcritic/issues/37
 gem "knife-ec2"
+gem "minitest-chef-handler"
 gem "rake"
 gem "rspec"
 gem "spiceweasel"
