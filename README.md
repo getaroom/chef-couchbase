@@ -14,14 +14,14 @@ Tested on Ubuntu 12.04.
 ATTRIBUTES
 ==========
 
-Server
-------
+couchbase-server
+----------------
 
-* `node['couchbase']['server']['edition']`         - The edition of Couchbase to install, "community" or "enterprise"
-* `node['couchbase']['server']['version']`         - The version of Couchbase to install
-* `node['couchbase']['server']['package_file]`     - The package file to download and install
-* `node['couchbase']['server']['package_base_url]` - The url path to download the package file from
-* `node['couchbase']['server']['package_full_url]` - The full url to the package file to download and install
+* `node['couchbase']['server']['edition']`         - The edition of couchbase-server to install, "community" or "enterprise"
+* `node['couchbase']['server']['version']`         - The version of couchbase-server to install
+* `node['couchbase']['server']['package_file]`     - The couchbase-server package file to download and install
+* `node['couchbase']['server']['package_base_url]` - The url path to download the couchbase-server package file from
+* `node['couchbase']['server']['package_full_url]` - The full url to the couchbase-server package file to download and install
 * `node['couchbase']['server']['database_path']`   - The directory Couchbase should persist data to
 * `node['couchbase']['server']['log_dir']`         - The directory Couchbase should log to
 * `node['couchbase']['server']['memory_quota_mb']` - The per server RAM quota for the entire cluster in megabytes
@@ -29,8 +29,25 @@ Server
 * `node['couchbase']['server']['username']`        - The cluster's username for the REST API and Admin UI
 * `node['couchbase']['server']['password']`        - The cluster's password for the REST API and Admin UI
 
+libcouchbase
+------------
+
+* `node['couchbase']['libcouchbase']['version']`         - The version of libcouchbase to install
+* `node['couchbase']['libcouchbase']['package_base_url]` - The url path to download the libcouchbase packages files from
+
+libvbucket
+----------
+
+* `node['couchbase']['libvbucket']['version']`         - The version of libvbucket to install
+* `node['couchbase']['libvbucket']['package_base_url]` - The url path to download the libvbucket packages files from
+
 RECIPES
 =======
+
+client
+------
+
+Installs the libvbucket and libcouchbase packages.
 
 server
 ------

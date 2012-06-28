@@ -1,5 +1,5 @@
 name "server_with_custom_memory_quota"
-description "Test for server recipe"
+description "Tests for Couchbase Server with a custom memory quota"
 
 run_list(
   "role[server]",

@@ -29,12 +29,7 @@ remote_file File.join(Chef::Config[:file_cache_path], node['couchbase']['server'
   action :create_if_missing
 end
 
-package File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file']) do
-  provider value_for_platform({
-    %w(debian ubuntu) => { :default => Chef::Provider::Package::Dpkg },
-    %w(redhat centos scientific amazon") => { :default => Chef::Provider::Package::Rpm },
-  })
-end
+dpkg_package File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file'])
 
 service "couchbase-server" do
   supports :restart => true, :status => true

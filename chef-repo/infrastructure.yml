@@ -7,6 +7,7 @@ environments:
 - production:
 
 roles:
+- client:
 - server:
 - server_with_custom_memory_quota:
 
@@ -16,8 +17,8 @@ data bags:
 
 nodes:
 - ec2 1:
-  - role[server]
+  - recipe[minitest-handler] role[client] role[server]
   - --no-host-key-verify -x ubuntu -G default -I ami-3c994355 -f c1.medium -d ubuntu12.04-gems --region us-east-1 -E production
 - ec2 1:
-  - role[server] role[server_with_custom_memory_quota]
+  - recipe[minitest-handler] role[client] role[server] role[server_with_custom_memory_quota]
   - --no-host-key-verify -x ubuntu -G default -I ami-3c994355 -f c1.medium -d ubuntu12.04-gems --region us-east-1 -E production

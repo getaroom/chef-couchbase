@@ -10,4 +10,5 @@ supports "debian"
 supports "ubuntu"
 
 recipe "couchbase::server", "Installs couchbase-server"
+recipe "couchbase::client", "Installs libcouchbase"
 recipe "couchbase::apps", "Setup buckets from the apps data bag"

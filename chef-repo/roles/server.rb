@@ -1,11 +1,10 @@
 name "server"
-description "Tests for Couchbase server"
+description "Tests for Couchbase Server"
 
 run_list(
   "recipe[couchbase::server]",
   "recipe[couchbase::test_buckets]",
   "recipe[couchbase::apps]",
-  "recipe[minitest-handler]",
 )
 
 default_attributes({
