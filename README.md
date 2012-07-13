@@ -54,32 +54,6 @@ server
 
 Installs the couchbase-server package and starts the couchbase-server service.
 
-apps
-----
-
-Setup buckets from the apps data bag.
-
-### Example Data Bag Item
-
-```json
-{
-  "id": "pillowfight",
-  "couchbase_role": ["couchbase_server"],
-  "couchbase_buckets": {
-    "production": {
-      "bucket": "pillowfight_production",
-      "memory_quota_percent": 0.75,
-      "replicas": 2
-    },
-    "staging": {
-      "bucket": "pillowfight_staging",
-      "memory_quota_mb": 256,
-      "replicas": false
-    }
-  }
-}
-```
-
 RESOURCES/PROVIDERS
 ===================
 
