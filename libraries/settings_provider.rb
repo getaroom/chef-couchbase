@@ -29,7 +29,7 @@ class Chef
       def settings_data
         @settings_data ||= begin
           response = get "/settings/#{@new_resource.group}"
-          Chef::Log.error response.body unless response.kind_of?(Net::HTTPSuccess) || response.body.empty?
+          Chef::Log.error response.body unless response.kind_of?(Net::HTTPSuccess) || response.body.to_s.empty?
           response.value
           JSONCompat.from_json response.body
         end
