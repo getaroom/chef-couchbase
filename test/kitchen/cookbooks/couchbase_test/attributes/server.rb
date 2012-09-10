@@ -1,0 +1,1 @@
+default['couchbase']['server']['password'] = "password"

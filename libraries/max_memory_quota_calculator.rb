@@ -22,10 +22,14 @@ module Couchbase
     end
 
     def in_megabytes
-      [max_megabytes_by_percent, max_megabytes_by_reserve].max
+      [max_megabytes_by_percent, max_megabytes_by_reserve, min_megabytes].max
     end
 
     protected
+
+    def min_megabytes
+      256
+    end
 
     def max_megabytes_by_percent
       bytes_to_megabytes total_in_bytes * MAX_MEMORY_PERCENT

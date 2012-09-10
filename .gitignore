@@ -1,4 +1,5 @@
 .bundle
-/.chef
+.kitchen
 .rvmrc
+/.chef
 Gemfile.lock

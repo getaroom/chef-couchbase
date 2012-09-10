@@ -1,0 +1,11 @@
+cookbook "couchbase" do
+  memory 768
+
+  configuration "client" do
+    runtimes []
+  end
+
+  configuration "server" do
+    runtimes []
+  end
+end

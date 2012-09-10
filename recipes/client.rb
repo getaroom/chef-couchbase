@@ -24,10 +24,13 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-package_machine = node['kernel']['machine'] == "i386" ? "i386" : "amd64"
+node['couchbase']['client']['dependencies'].each do |dependency|
+  package dependency
+end
 
 %w(libvbucket libcouchbase).each do |lib|
   %w(1 -dev).each do |package_suffix|
+    package_machine = node['kernel']['machine'] == "i386" ? "i386" : "amd64"
     package_file = "#{lib}#{package_suffix}_#{node['couchbase'][lib]['version']}_#{package_machine}.deb"
 
     remote_file File.join(Chef::Config[:file_cache_path], package_file) do
