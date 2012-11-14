@@ -54,6 +54,11 @@ server
 
 Installs the couchbase-server package and starts the couchbase-server service.
 
+default_bucket
+--------------
+
+Sets up a default bucket with 100mb of memory.
+
 RESOURCES/PROVIDERS
 ===================
 
