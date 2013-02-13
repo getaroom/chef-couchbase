@@ -4,9 +4,9 @@ default['couchbase']['server']['edition'] = "community"
 default['couchbase']['server']['version'] = "2.0.0"
 
 case platform
-when "ubuntu"
+when "ubuntu", "debian"
   default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}_#{package_machine}_#{node['couchbase']['server']['version']}.deb"
-when "redhat", "centos", "scientific", "amazon"
+when "redhat", "centos", "scientific", "amazon", "fedora"
   default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}_#{package_machine}_#{node['couchbase']['server']['version']}.rpm"
 when "windows"
   default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}_#{package_machine}_#{node['couchbase']['server']['version']}.setup.exe"
