@@ -7,7 +7,13 @@ module Couchbase
 
     class << self
       def from_node(node)
-        new kilobytes_to_bytes node["memory"]['total'].to_i
+        if node["memory"].nil?
+          # Usually nodes have this set, except if running in RSpec without Fauxhai,
+          # so set some dummy value
+          new kilobytes_to_bytes 0.to_i
+        else
+          new kilobytes_to_bytes node["memory"]['total'].to_i
+        end
       end
 
       protected
