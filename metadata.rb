@@ -10,5 +10,9 @@ version          "1.0.0"
   supports os
 end
 
+%w{apt yum}.each do |d|
+  depends d
+end
+
 recipe "couchbase::server", "Installs couchbase-server"
 recipe "couchbase::client", "Installs libcouchbase"
