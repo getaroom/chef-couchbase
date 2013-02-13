@@ -25,7 +25,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 # Mutually exclusive with the server recipe. If you have the server on this node you don't need moxi client.
-unless (node.recipes.include?("couchbase::server"))
+unless (node['recipes'].include?("couchbase::server"))
 
   remote_file File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_
 file']) do
