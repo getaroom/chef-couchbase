@@ -27,8 +27,7 @@
 # Mutually exclusive with the server recipe. If you have the server on this node you don't need moxi client.
 unless (node['recipes'].include?("couchbase::server"))
 
-  remote_file File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_
-file']) do
+  remote_file File.join(Chef::Config[:file_cache_path], node['couchbase']['moxi']['package_file']) do
     source node['couchbase']['moxi']['package_full_url']
     action :create_if_missing
   end
@@ -45,24 +44,16 @@ file']) do
     action :enable
   end
 
-  # Needs testing as to contents
-  #cookbook_file "/opt/moxi/etc/moxi.cfg" do
-  #  source "moxi-client.cfg"
-  #  owner "moxi"
-  #  group "moxi"
-  #  mode 00644
-  #  notifies :restart, "service[moxi-server]"
-  #end
-
-  #cookbook_file "/opt/moxi/etc/moxi-cluster.cfg" do
-  #  source "moxi-cluster-client.cfg"
-  #  owner "moxi"
-  #  group "moxi"
-  #  mode 00755
-  #  notifies :restart, "service[moxi-server]"
-  #end
+  template "/opt/moxi/etc/moxi-cluster.cfg" do
+    source "moxi-cluster.cfg.erb"
+    owner 'moxi'
+    group 'moxi'
+    mode '00644'
+    action :create
+  end
 
   service "moxi-server" do
     action :start
   end
+
 end
