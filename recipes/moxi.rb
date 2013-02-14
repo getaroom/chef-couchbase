@@ -50,6 +50,7 @@ unless (node['recipes'].include?("couchbase::server"))
     group 'moxi'
     mode '00644'
     action :create
+    notifies :restart, "service[moxi-server]"
   end
 
   service "moxi-server" do
