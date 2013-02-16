@@ -32,10 +32,10 @@ unless (node['recipes'].include?("couchbase::server"))
     action :create_if_missing
   end
 
-  case node['platform']
-  when "debian", "ubuntu"
+  case node['platform_family']
+  when "debian"
     dpkg_package File.join(Chef::Config[:file_cache_path], node['couchbase']['moxi']['package_file'])
-  when "redhat", "centos", "scientific", "amazon", "fedora"
+  when "rhel"
     rpm_package File.join(Chef::Config[:file_cache_path], node['couchbase']['moxi']['package_file'])
   end
   

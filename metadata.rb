@@ -10,9 +10,10 @@ version          "1.0.0"
   supports os
 end
 
-%w{apt yum}.each do |d|
+%w{apt windows yum}.each do |d|
   depends d
 end
 
 recipe "couchbase::server", "Installs couchbase-server"
 recipe "couchbase::client", "Installs libcouchbase"
+recipe "couchbase::moxi", "Installs moxi-server"

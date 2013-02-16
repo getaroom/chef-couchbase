@@ -35,7 +35,18 @@ when "debian", "ubuntu"
 when "redhat", "centos", "scientific", "amazon", "fedora"
   rpm_package File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file'])
 when "windows"
-  # TK
+
+  template "#{Chef::Config[:file_cache_path]}/setup.iss" do
+    source "setup.iss.erb"
+    action :create
+  end
+
+  windows_package "Couchbase Server" do
+    source File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file'])
+    options "/s"
+    installer_type :custom
+    action :install
+  end
 end
 
 service "couchbase-server" do
