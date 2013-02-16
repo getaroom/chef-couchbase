@@ -6,12 +6,13 @@ Installs and configures Couchbase.
 REQUIREMENTS
 ============
 
-Platform
---------
+Chef 0.10.10 and Ohai 0.6.12 are required due to the use of platform_family.
 
-* Ubuntu
-* Debian
-* CentOS/RHEL 5, 6
+Platforms
+---------
+
+* Debian family (Debian, Ubuntu etc)
+* Red Hat family (Redhat, CentOS, Oracle etc)
 * Microsoft Windows
 
 Note that Couchbase Server does not support Windows 8 or Server 2012: see http://www.couchbase.com/issues/browse/MB-7016.
