@@ -29,7 +29,25 @@ remote_file File.join(Chef::Config[:file_cache_path], node['couchbase']['server'
   action :create_if_missing
 end
 
-dpkg_package File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file'])
+case node['platform']
+when "debian", "ubuntu"
+  dpkg_package File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file'])
+when "redhat", "centos", "scientific", "amazon", "fedora"
+  rpm_package File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file'])
+when "windows"
+
+  template "#{Chef::Config[:file_cache_path]}/setup.iss" do
+    source "setup.iss.erb"
+    action :create
+  end
+
+  windows_package "Couchbase Server" do
+    source File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file'])
+    options "/s"
+    installer_type :custom
+    action :install
+  end
+end
 
 service "couchbase-server" do
   supports :restart => true, :status => true

@@ -2,3 +2,4 @@
 /.chef
 .rvmrc
 Gemfile.lock
+.kitchen

@@ -24,17 +24,49 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-package_machine = node['kernel']['machine'] == "i386" ? "i386" : "amd64"
-
-%w(libvbucket libcouchbase).each do |lib|
-  %w(1 -dev).each do |package_suffix|
-    package_file = "#{lib}#{package_suffix}_#{node['couchbase'][lib]['version']}_#{package_machine}.deb"
-
-    remote_file File.join(Chef::Config[:file_cache_path], package_file) do
-      source "#{node['couchbase'][lib]['package_base_url']}/#{package_file}"
-      action :create_if_missing
-    end
-
-    dpkg_package File.join(Chef::Config[:file_cache_path], package_file)
+case node['platform_family']
+when "debian"
+  apt_repository "couchbase" do
+    uri "http://packages.couchbase.com/ubuntu"
+    distribution node['lsb']['codename']
+    components ["main"]
+    key "http://packages.couchbase.com/ubuntu/couchbase.key"
   end
+
+  %w{libcouchbase2 libcouchbase-dev}.each do |p|
+    package p do
+      action :install
+    end
+  end
+
+when "rhel"
+  yum_key "couchbase-rpm.key" do
+    url "http://packages.couchbase.com/rpm/couchbase-rpm.key"
+    action :add
+  end
+
+  case
+  when node['platform_version'].to_f >= 5.0 && node['platform_version'].to_f < 6.0
+    osver = '5.5'
+  when node['platform_version'].to_f >= 6.0
+    osver = '6.2'
+  else
+    Chef::Log.error("Platform version #{node['platform_version']} is unsupported by Couchbase C library")
+  end
+
+  yum_repository "couchbase" do
+    name "couchbase"
+    description "Couchbase package repository"
+    url "http://packages.couchbase.com/rpm/#{osver}/$basearch/"
+    action :add
+  end
+
+  %w{libcouchbase2 libcouchbase-devel}.each do |p|
+    package p do
+      action :install
+    end
+  end
+
+else
+  Chef::Log.error("Platform family #{node['platform_family']} is unsupported by Couchbase C library")
 end
