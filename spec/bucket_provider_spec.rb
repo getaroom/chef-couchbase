@@ -23,6 +23,8 @@ describe Chef::Provider::CouchbaseBucket do
       :memory_quota_percent => new_memory_quota_percent,
       :replicas => new_replicas,
       :updated_by_last_action => nil,
+      :auth_type => "sasl",
+      :proxy_port => 11212,
     })
   end
 
@@ -166,7 +168,6 @@ describe Chef::Provider::CouchbaseBucket do
         it "POSTs to the Management REST API to create the bucket" do
           provider.action_create
           request.with(:body => hash_including({
-            "authType" => "sasl",
             "saslPassword" => "",
             "bucketType" => "membase",
             "name" => new_resource.bucket,
