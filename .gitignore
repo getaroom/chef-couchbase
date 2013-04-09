@@ -1,5 +1,18 @@
-.bundle
-/.chef
 .rvmrc
+.vagrant
+Berksfile.lock
+*~
+*#
+.#*
+\#*#
+.*.sw[a-z]
+*.un~
+/cookbooks
+
+# Bundler
 Gemfile.lock
+bin/*
+.bundle/*
+
+# test-kitchen
 .kitchen
