@@ -1,4 +1,3 @@
-.rvmrc
 .vagrant
 Berksfile.lock
 *~
@@ -14,5 +13,3 @@ Gemfile.lock
 bin/*
 .bundle/*
 
-# test-kitchen
-.kitchen
