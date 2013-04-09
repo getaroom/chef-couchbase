@@ -1,6 +1,6 @@
 name             "couchbase"
-maintainer       "getaroom"
-maintainer_email "devteam@roomvaluesteam.com"
+maintainer       "Julian C. Dunn"
+maintainer_email "jdunn@opscode.com"
 license          "MIT"
 description      "Installs/Configures Couchbase"
 long_description IO.read(File.join(File.dirname(__FILE__), "README.md"))
