@@ -186,14 +186,22 @@ couchbase_bucket "pillowfight" do
 end
 ```
 
+ROADMAP
+=======
+
+* Many of the heavyweight resources/providers need to be moved to LWRPs.
+* The spec tests are currently broken.
+
 LICENSE AND AUTHOR
 ==================
 
-Author:: Chris Griego (<cgriego@getaroom.com>)
-Author:: Morgan Nelson (<mnelson@getaroom.com>)
-Author:: Julian Dunn (<jdunn@aquezada.com>)
+* Author:: Chris Griego (<cgriego@getaroom.com>)
+* Author:: Morgan Nelson (<mnelson@getaroom.com>)
+* Author:: Julian Dunn (<jdunn@aquezada.com>)
 
-Copyright 2012, getaroom
+* Copyright 2012, getaroom
+* Copyright 2012, SecondMarket Labs, LLC.
+* Copyright 2013, Opscode, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
