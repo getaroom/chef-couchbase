@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 gem "activesupport"
-gem "chef"
+gem "chef", "< 11.0"
 gem "foodcritic", "!= 1.4.0" # https://github.com/acrmp/foodcritic/issues/37
 gem "knife-ec2"
 gem "minitest-chef-handler"
