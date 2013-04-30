@@ -32,7 +32,7 @@ describe_recipe "couchbase::server" do
   end
 
   describe "static_config" do
-    let(:static_config) { file "/opt/couchbase/etc/couchbase/static_config" }
+    let(:static_config) { file File.join(node['couchbase']['server']['install_dir'], 'etc', 'couchbase', 'static_config') }
 
     it "moves the log directory" do
       static_config.must_include %{{error_logger_mf_dir, "#{node['couchbase']['server']['log_dir']}"}.}
