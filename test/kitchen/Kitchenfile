@@ -1,7 +1,0 @@
-cookbook "couchbase" do
-# Server doesn't work because MaxMemoryCalculator on the test VM gets less
-# than the minimum amount and bombs out
-# configuration "server"
-  configuration "client"
-  configuration "moxi"
-end

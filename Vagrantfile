@@ -9,11 +9,11 @@ Vagrant.configure("2") do |config|
   config.vm.hostname = "couchbase-berkshelf"
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "centos-6.3"
+  config.vm.box = "centos-6.4"
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
-  config.vm.box_url = "https://dl.dropbox.com/u/47541301/vagrantboxes/centos-6.3.box"
+  config.vm.box_url = "https://dl.dropbox.com/u/47541301/vagrantboxes/centos-6.4.box"
 
   # Assign this VM to a host-only network IP, allowing you to access it
   # via the IP. Host-only networks can talk to the host machine as well as
@@ -67,7 +67,13 @@ Vagrant.configure("2") do |config|
   # config.berkshelf.except = []
 
   config.vm.provision :chef_solo do |chef|
-    chef.json = {}
+    chef.json = {
+      :couchbase => {
+        :server => {
+          :password => "somepassword"
+        }
+      }
+    }
 
     chef.run_list = [
       "recipe[couchbase::server]"

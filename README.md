@@ -1,13 +1,12 @@
-DESCRIPTION
+Description
 ===========
 
 Installs and configures Couchbase.
 
-REQUIREMENTS
+Requirements
 ============
 
 Chef 0.10.10 and Ohai 0.6.12 are required due to the use of platform_family.
-Works with Chef 11.4.0
 
 Platforms
 ---------
@@ -18,7 +17,7 @@ Platforms
 
 Note that Couchbase Server does not support Windows 8 or Server 2012: see http://www.couchbase.com/issues/browse/MB-6395. This is targeted to be fixed in Couchbase 2.0.2.
 
-ATTRIBUTES
+Attributes
 ==========
 
 couchbase-server
@@ -51,7 +50,7 @@ moxi
 * `node['couchbase']['moxi']['cluster_server']`     - The bootstrap server for moxi to contact for the node list
 * `node['couchbase']['moxi']['cluster_rest_url']`   - The bootstrap server's full REST URL for retrieving the initial node list
 
-RECIPES
+Recipes
 =======
 
 client
@@ -69,7 +68,7 @@ moxi
 
 Installs the moxi-server package and starts the moxi-server service.
 
-RESOURCES/PROVIDERS
+Resources/Providers
 ===================
 
 couchbase_node
@@ -187,13 +186,35 @@ couchbase_bucket "pillowfight" do
 end
 ```
 
-ROADMAP
+Chef Solo Note
+==============
+
+These node attributes are stored on the Chef
+server when using `chef-client`. Because `chef-solo` does not
+connect to a server or save the node object at all, to have the same
+passwords persist across `chef-solo` runs, you must specify them in
+the `json_attribs` file used. For example:
+
+    {
+      "couchbase": {
+        "server": {
+          "password": "somepassword"
+        }
+      }
+      "run_list":["recipe[couchbase::server]"]
+    }
+
+Couchbase Server expects the password to be longer than six characters.
+
+Roadmap
 =======
 
+* Sometimes couchbase doesn't come up right away, so we need to add some
+  retries in couchbase_node otherwise we get ECONNREFUSED
 * Many of the heavyweight resources/providers need to be moved to LWRPs.
 * The spec tests are currently broken.
 
-LICENSE AND AUTHOR
+License and Author
 ==================
 
 * Author:: Chris Griego (<cgriego@getaroom.com>)

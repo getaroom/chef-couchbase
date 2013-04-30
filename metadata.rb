@@ -10,7 +10,7 @@ version          "1.0.0"
   supports os
 end
 
-%w{apt windows yum}.each do |d|
+%w{apt openssl windows yum}.each do |d|
   depends d
 end
 

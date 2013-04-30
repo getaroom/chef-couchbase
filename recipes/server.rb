@@ -24,6 +24,27 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
+::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
+
+if Chef::Config[:solo]
+  missing_attrs = %w{
+    password
+  }.select do |attr|
+    node['couchbase']['server'][attr].nil?
+  end.map { |attr| "node['couchbase']['server']['#{attr}']" }
+
+  if !missing_attrs.empty?
+    Chef::Application.fatal!([
+        "You must set #{missing_attrs.join(', ')} in chef-solo mode.",
+        "For more information, see https://github.com/juliandunn/couchbase#chef-solo-note"
+      ].join(' '))
+  end
+else
+  # generate all passwords
+  node.set_unless['couchbase']['server']['password'] = secure_password
+  node.save
+end
+
 remote_file File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file']) do
   source node['couchbase']['server']['package_full_url']
   action :create_if_missing
@@ -33,7 +54,7 @@ case node['platform']
 when "debian", "ubuntu"
   dpkg_package File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file'])
 when "redhat", "centos", "scientific", "amazon", "fedora"
-  rpm_package File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file'])
+  yum_package File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file'])
 when "windows"
 
   template "#{Chef::Config[:file_cache_path]}/setup.iss" do
