@@ -15,7 +15,7 @@ Platforms
 * Red Hat family (Redhat, CentOS, Oracle etc)
 * Microsoft Windows
 
-Note that Couchbase Server does not support Windows 8 or Server 2012: see http://www.couchbase.com/issues/browse/MB-6395. This is targeted to be fixed in Couchbase 2.0.2.
+Note that Couchbase Server does not support Windows 8 or Server 2012: see http://www.couchbase.com/issues/browse/MB-6395. This is targeted to be fixed in Couchbase 2.1.
 
 Attributes
 ==========
