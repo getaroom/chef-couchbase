@@ -2,10 +2,8 @@ source "https://rubygems.org"
 
 gem "activesupport"
 gem "berkshelf"
-gem "vagrant", "~> 1.0.6"
-gem "vagrant-windows"
 gem "chef"
-gem "foodcritic", "!= 1.4.0" # https://github.com/acrmp/foodcritic/issues/37
+gem "foodcritic", "> 1.4.0" # https://github.com/acrmp/foodcritic/issues/37
 gem "knife-ec2"
 gem "minitest-chef-handler"
 gem "rake"
