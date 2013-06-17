@@ -180,6 +180,7 @@ end
 couchbase_bucket "pillowfight" do
   memory_quota_percent 0.5
   replicas false
+  saslPassword "bucketPassword"
 
   username "Administrator"
   password "password"
