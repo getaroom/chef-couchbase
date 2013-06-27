@@ -43,8 +43,8 @@ class Chef
       	})
       end
 
-      def saslPassword(arg=nil)
-        set_or_return(:saslPassword, arg, :kind_of => String, :default => "")
+      def saslpassword(arg=nil)
+        set_or_return(:saslpassword, arg, :kind_of => String, :default => "")
       end
 
       def initialize(*)

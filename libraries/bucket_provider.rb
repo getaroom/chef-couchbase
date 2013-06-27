@@ -46,7 +46,7 @@ class Chef
       def create_params
         {
           "authType" => "sasl",
-          "saslPassword" =>  new_resource.saslPassword,
+          "saslPassword" =>  new_resource.saslpassword,
           "bucketType" => new_api_type,
           "name" => new_resource.bucket,
           "ramQuotaMB" => new_memory_quota_mb,
