@@ -3,11 +3,11 @@ require "cluster_provider"
 require "cluster_resource"
 
 describe Chef::Provider::CouchbaseCluster do
-  let(:provider) { described_class.new(new_resource, stub("run_context")) }
+  let(:provider) { described_class.new(new_resource, double("run_context")) }
   let(:base_uri) { "#{new_resource.username}:#{new_resource.password}@localhost:8091" }
 
   let :new_resource do
-    stub({
+    double({
       :name => "my new pool",
       :cluster => "default",
       :username => "Administrator",
@@ -81,7 +81,7 @@ describe Chef::Provider::CouchbaseCluster do
     let(:memory_quota_mb) { 256 }
 
     before do
-      provider.current_resource = stub({
+      provider.current_resource = double({
         :cluster => "default",
         :memory_quota_mb => memory_quota_mb,
         :exists => cluster_exists,

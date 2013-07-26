@@ -3,13 +3,13 @@ require "node_resource"
 require "node_provider"
 
 describe Chef::Provider::CouchbaseNode do
-  let(:provider) { described_class.new(new_resource, stub("run_context")) }
+  let(:provider) { described_class.new(new_resource, double("run_context")) }
   let(:base_uri) { "#{new_resource.username}:#{new_resource.password}@localhost:8091" }
   let(:id) { "self" }
   let(:new_database_path) { "/opt/couchbase/var/lib/couchbase/data" }
 
   let :new_resource do
-    stub({
+    double({
       :name => "my node",
       :id => id,
       :username => "Administrator",
@@ -88,7 +88,7 @@ describe Chef::Provider::CouchbaseNode do
         let(:new_database_path) { "/mnt/couchbase-server/data/#{SecureRandom.hex(8)}" }
 
         let :current_resource do
-          stub({
+          double({
             :name => "my node",
             :id => id,
             :database_path => "/opt/couchbase/var/lib/couchbase/data",
@@ -130,7 +130,7 @@ describe Chef::Provider::CouchbaseNode do
 
     context "database path matches" do
       let :new_resource do
-        stub({
+        double({
           :name => "my node",
           :id => "self",
           :database_path => "/opt/couchbase/var/lib/couchbase/data",
@@ -138,7 +138,7 @@ describe Chef::Provider::CouchbaseNode do
       end
 
       let :current_resource do
-        stub({
+        double({
           :name => "my node",
           :id => "self",
           :database_path => "/opt/couchbase/var/lib/couchbase/data",
@@ -153,7 +153,7 @@ describe Chef::Provider::CouchbaseNode do
       let(:new_database_path) { "/mnt/couchbase-server/data" }
 
       let :current_resource do
-        stub(:name => "my node", :id => "self", :database_path => "/opt/couchbase/var/lib/couchbase/data")
+        double(:name => "my node", :id => "self", :database_path => "/opt/couchbase/var/lib/couchbase/data")
       end
 
       before do

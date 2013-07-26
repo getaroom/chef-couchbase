@@ -3,12 +3,12 @@ require "settings_resource"
 require "settings_provider"
 
 describe Chef::Provider::CouchbaseSettings do
-  let(:provider) { described_class.new(new_resource, stub("run_context")) }
+  let(:provider) { described_class.new(new_resource, double("run_context")) }
   let(:new_settings) { {} }
   let(:base_uri) { "#{new_resource.username}:#{new_resource.password}@localhost:8091" }
 
   let :new_resource do
-    stub({
+    double({
       :name => "my settings",
       :group => group,
       :username => "Administrator",
@@ -114,7 +114,7 @@ describe Chef::Provider::CouchbaseSettings do
     before { provider.current_resource = current_resource }
 
     let :current_resource do
-      stub({
+      double({
         :name => "current resource",
         :group => group,
         :username => "Administrator",

@@ -4,7 +4,7 @@ require "bucket_resource"
 require "securerandom"
 
 describe Chef::Provider::CouchbaseBucket do
-  let(:provider) { described_class.new new_resource, stub("run_context") }
+  let(:provider) { described_class.new new_resource, double("run_context") }
   let(:base_uri) { "#{new_resource.username}:#{new_resource.password}@localhost:8091" }
   let(:bucket_name) { "default" }
   let(:new_bucket_type) { "couchbase" }
@@ -13,7 +13,7 @@ describe Chef::Provider::CouchbaseBucket do
   let(:new_memory_quota_percent) { nil }
 
   let :new_resource do
-    stub({
+    double({
       :name => "mah_bukkit",
       :bucket => bucket_name,
       :type => new_bucket_type,
@@ -151,7 +151,7 @@ describe Chef::Provider::CouchbaseBucket do
     let(:current_replicas) { new_resource.replicas || 0 }
 
     let :current_resource do
-      stub({
+      double({
         :name => new_resource.name,
         :bucket => new_resource.bucket,
         :saslpassword => new_resource.saslpassword,
