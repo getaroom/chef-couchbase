@@ -56,3 +56,5 @@ default['couchbase']['server']['username'] = "Administrator"
 default['couchbase']['server']['password'] = nil
 
 default['couchbase']['server']['memory_quota_mb'] = Couchbase::MaxMemoryQuotaCalculator.from_node(node).in_megabytes
+
+default['couchbase']['server']['port'] = 8091
