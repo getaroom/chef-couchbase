@@ -96,15 +96,16 @@ end
 
 ruby_block "rewrite_couchbase_log_dir_config" do
   log_dir_line = %{{error_logger_mf_dir, "#{node['couchbase']['server']['log_dir']}"}.}
+  static_config_file = ::File.join(node['couchbase']['server']['install_dir'], 'etc', 'couchbase', 'static_config')
 
   block do
-    file = Chef::Util::FileEdit.new("/opt/couchbase/etc/couchbase/static_config")
+    file = Chef::Util::FileEdit.new(static_config_file)
     file.search_file_replace_line(/error_logger_mf_dir/, log_dir_line)
     file.write_file
   end
 
   notifies :restart, "service[couchbase-server]"
-  not_if "grep '#{log_dir_line}' /opt/couchbase/etc/couchbase/static_config"
+  not_if "grep '#{log_dir_line}' #{static_config_file}" # XXX won't work on Windows, no 'grep'
 end
 
 directory node['couchbase']['server']['database_path'] do
