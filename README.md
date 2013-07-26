@@ -34,6 +34,7 @@ couchbase-server
                                                       defaults to Couchbase's maximum allowed value
 * `node['couchbase']['server']['username']`         - The cluster's username for the REST API and Admin UI
 * `node['couchbase']['server']['password']`         - The cluster's password for the REST API and Admin UI
+* `node['couchbase']['server']['allow_unsigned_packages'] - Whether to allow Couchbase's unsigned packages to be installed (default to 'true')
 
 client
 ------

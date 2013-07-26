@@ -54,7 +54,9 @@ when "debian", "ubuntu"
   package "libssl0.9.8"
   dpkg_package File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file'])
 when "redhat", "centos", "scientific", "amazon", "fedora"
-  yum_package File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file'])
+  yum_package File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file']) do
+    options node['couchbase']['server']['allow_unsigned_packages'] == true ? "--nogpgcheck" : ""
+  end
 when "windows"
 
   template "#{Chef::Config[:file_cache_path]}/setup.iss" do
