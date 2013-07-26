@@ -225,10 +225,7 @@ Couchbase Server expects the password to be longer than six characters.
 Roadmap
 =======
 
-* Sometimes couchbase doesn't come up right away, so we need to add some
-  retries in couchbase_node otherwise we get ECONNREFUSED
 * Many of the heavyweight resources/providers need to be moved to LWRPs.
-* The spec tests are currently broken.
 
 If you have time to work on these things or to improve the cookbook in other ways, please submit a pull request.
 
