@@ -3,6 +3,8 @@ Description
 
 Installs and configures Couchbase.
 
+[![Build Status](https://travis-ci.org/juliandunn/couchbase.png)](https://travis-ci.org/juliandunn/couchbase)
+
 Requirements
 ============
 
