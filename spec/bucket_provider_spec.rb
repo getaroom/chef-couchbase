@@ -20,6 +20,7 @@ describe Chef::Provider::CouchbaseBucket do
       :cluster => "default_#{SecureRandom.hex(2)}",
       :username => "Administrator",
       :password => "password",
+      :saslpassword => "password",
       :memory_quota_mb => new_memory_quota_mb,
       :memory_quota_percent => new_memory_quota_percent,
       :replicas => new_replicas,
@@ -153,6 +154,7 @@ describe Chef::Provider::CouchbaseBucket do
       stub({
         :name => new_resource.name,
         :bucket => new_resource.bucket,
+        :saslpassword => new_resource.saslpassword,
         :exists => bucket_exists,
         :memory_quota_mb => current_memory_quota_mb,
         :replicas => current_replicas,
@@ -168,7 +170,7 @@ describe Chef::Provider::CouchbaseBucket do
           provider.action_create
           request.with(:body => hash_including({
             "authType" => "sasl",
-            "saslPassword" => "",
+            "saslPassword" => new_resource.saslpassword,
             "bucketType" => "membase",
             "name" => new_resource.bucket,
             "ramQuotaMB" => new_resource.memory_quota_mb.to_s,
@@ -242,7 +244,7 @@ describe Chef::Provider::CouchbaseBucket do
           provider.action_create
           request.with(:body => hash_including({
             "authType" => "sasl",
-            "saslPassword" => "",
+            "saslPassword" => new_resource.saslpassword,
             "bucketType" => "memcached",
             "name" => new_resource.bucket,
             "ramQuotaMB" => new_resource.memory_quota_mb.to_s,
