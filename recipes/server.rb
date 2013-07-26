@@ -41,8 +41,7 @@ if Chef::Config[:solo]
   end
 else
   # generate all passwords
-  node.set_unless['couchbase']['server']['password'] = secure_password
-  node.save
+  (node.set['couchbase']['server']['password'] = secure_password && node.save) unless node['couchbase']['server']['password']
 end
 
 remote_file File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file']) do
