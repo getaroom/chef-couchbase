@@ -70,9 +70,22 @@ when "windows"
   end
 end
 
-service "couchbase-server" do
-  supports :restart => true, :status => true
-  action [:enable, :start]
+ruby_block "block_until_operational" do
+  block do
+    Chef::Log.info "Waiting until Couchbase is listening on port #{node['couchbase']['server']['port']}"
+    until CouchbaseHelper.service_listening?(node['couchbase']['server']['port']) do
+      sleep 1
+      Chef::Log.debug(".")
+    end
+
+    Chef::Log.info "Waiting until the Couchbase admin API is responding"
+    test_url = URI.parse("http://localhost:#{node['couchbase']['server']['port']}")
+    until CouchbaseHelper.endpoint_responding?(test_url) do
+      sleep 1
+      Chef::Log.debug(".")
+    end
+  end
+  action :nothing
 end
 
 directory node['couchbase']['server']['log_dir'] do
@@ -100,6 +113,12 @@ directory node['couchbase']['server']['database_path'] do
   group "couchbase"
   mode 0755
   recursive true
+end
+
+service "couchbase-server" do
+  supports :restart => true, :status => true
+  action [:enable, :start]
+  notifies :create, "ruby_block[block_until_operational]", :immediately
 end
 
 couchbase_node "self" do
