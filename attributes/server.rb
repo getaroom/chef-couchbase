@@ -36,7 +36,7 @@ when "windows"
     default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}_#{package_machine}_#{node['couchbase']['server']['version']}.setup.exe"
   end
 else
-  Chef::Log.error("Couchbase Server is not supported on #{platform_family}")
+  Chef::Log.error("Couchbase Server is not supported on #{node['platform_family']}")
 end
 
 default['couchbase']['server']['package_base_url'] = "http://packages.couchbase.com/releases/#{node['couchbase']['server']['version']}"
