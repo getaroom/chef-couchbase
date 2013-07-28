@@ -46,7 +46,7 @@ platforms:
       memory: 1024
 
 suites:
-- name: server
+- name: server-community
   run_list:
   - recipe[minitest-handler]
   - recipe[couchbase::server]
@@ -54,6 +54,17 @@ suites:
     couchbase:
       server:
         password: "whatever"
+
+- name: server-enterprise
+  run_list:
+  - recipe[minitest-handler]
+  - recipe[couchbase::server]
+  attributes:
+    couchbase:
+      server:
+        edition: "enterprise"
+        password: "whatever"
+        version: "2.1.0"
 
 - name: moxi
   run_list:
