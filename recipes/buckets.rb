@@ -29,7 +29,8 @@ node['couchbase']['buckets'].each do |bucket_name, bucket_config|
   bucket_config = {} if bucket_config.nil? or [TrueClass, FalseClass].include?(bucket_config.class)
   
   couchbase_bucket bucket_name do
-    bucket       bucket_name
+    bucket bucket_name
+    
     type         bucket_config['type'] if bucket_config.has_key?('type')
     replicas     bucket_config['replicas'] if bucket_config.has_key?('replicas')
     cluster      bucket_config['cluster'] if bucket_config.has_key?('cluster')
