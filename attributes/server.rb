@@ -22,7 +22,7 @@
 package_machine = node['kernel']['machine'] == "x86_64" ? "x86_64" : "x86"
 
 default['couchbase']['server']['edition'] = "community"
-default['couchbase']['server']['version'] = "2.0.1"
+default['couchbase']['server']['version'] = "2.1.1"
 
 case node['platform_family']
 when "debian"
