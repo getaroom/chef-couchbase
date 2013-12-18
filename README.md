@@ -53,6 +53,19 @@ moxi
 * `node['couchbase']['moxi']['cluster_server']`     - The bootstrap server for moxi to contact for the node list
 * `node['couchbase']['moxi']['cluster_rest_url']`   - The bootstrap server's full REST URL for retrieving the initial node list
 
+buckets
+-------
+
+* `mybucket1`                                                 - The name to use for the Couchbase bucket
+* `node['couchbase']['buckets']['mybucket1']['cluster']`      - The name of the cluster the bucket belongs to, defaults to "default"
+* `node['couchbase']['buckets']['mybucket1']['type']`         - The type of the bucket, defaults to "couchbase"
+* `node['couchbase']['buckets']['mybucket1']['saslpassword']` - The password of the bucket, defaults to ""
+* `node['couchbase']['buckets']['mybucket1']['replicas']`     - Number of replica (backup) copies, defaults to 1. Set to false to disable
+* `node['couchbase']['buckets']['mybucket1']['username']`     - The username to use to authenticate with Couchbase
+* `node['couchbase']['buckets']['mybucket1']['password']`     - The password to use to authenticate with Couchbase
+* `node['couchbase']['buckets']['mybucket1']['memory_quota_mb']`      - The bucket's per server RAM quota for the entire cluster in megabytes
+* `node['couchbase']['buckets']['mybucket1']['memory_quota_percent']` - The bucket's RAM quota as a percent (0.0-1.0) of the cluster's quota
+
 Recipes
 =======
 
@@ -70,6 +83,11 @@ moxi
 ----
 
 Installs the moxi-server package and starts the moxi-server service.
+
+buckets
+-------
+
+Creates or updates buckets.
 
 Resources/Providers
 ===================
@@ -166,7 +184,7 @@ couchbase_bucket
 * `type` - The type of the bucket, defaults to "couchbase"
 * `saslpassword` - The password of the bucket, defaults to ""
 * `memory_quota_mb` - The bucket's per server RAM quota for the entire cluster in megabytes
-* `memory_quota_percent` The bucket's RAM quota as a percent (0.0-1.0) of the cluster's quota
+* `memory_quota_percent` - The bucket's RAM quota as a percent (0.0-1.0) of the cluster's quota
 * `replicas` - Number of replica (backup) copies, defaults to 1. Set to false to disable
 * `username` - The username to use to authenticate with Couchbase
 * `password` - The password to use to authenticate with Couchbase
@@ -222,6 +240,25 @@ the `json_attribs` file used. For example:
 
 Couchbase Server expects the password to be longer than six characters.
 
+An example to configure buckets with `chef-solo`:
+
+    {
+      "couchbase": {
+        "server": {
+          "password": "somepassword"
+        },
+        "buckets": {
+            "mybucket1": true,
+            "mymemcached1": {
+                "type": "memcached",
+                "memory_quota_mb": 500
+            }
+        }
+      }
+      "run_list":["recipe[couchbase::server]"]
+    }
+
+
 Roadmap
 =======
 
@@ -235,10 +272,12 @@ License and Author
 * Author:: Chris Griego (<cgriego@getaroom.com>)
 * Author:: Morgan Nelson (<mnelson@getaroom.com>)
 * Author:: Julian Dunn (<jdunn@aquezada.com>)
+* Author:: Enrico Stahn (<mail@enricostahn.com>)
 
 * Copyright:: 2012, getaroom
 * Copyright:: 2012, SecondMarket Labs, LLC.
 * Copyright:: 2013, Opscode, Inc.
+* Copyright:: 2013, Zanui
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
