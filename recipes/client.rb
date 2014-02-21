@@ -29,7 +29,7 @@ when "debian"
   apt_repository "couchbase" do
     uri "http://packages.couchbase.com/ubuntu"
     distribution node['lsb']['codename']
-    components ["main"]
+    components ["#{node['lsb']['codename']}/main"]
     key "http://packages.couchbase.com/ubuntu/couchbase.key"
   end
 
