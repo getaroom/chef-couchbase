@@ -22,19 +22,15 @@
 package_machine = node['kernel']['machine'] == "x86_64" ? "x86_64" : "x86"
 
 default['couchbase']['server']['edition'] = "community"
-default['couchbase']['server']['version'] = "2.1.1"
+default['couchbase']['server']['version'] = "2.2.0"
 
 case node['platform_family']
 when "debian"
-  default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}_#{package_machine}_#{node['couchbase']['server']['version']}.deb"
+  default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}_#{node['couchbase']['server']['version']}_#{package_machine}.deb"
 when "rhel"
-  default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}_#{package_machine}_#{node['couchbase']['server']['version']}.rpm"
+  default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}_#{node['couchbase']['server']['version']}_#{package_machine}.rpm"
 when "windows"
-  if node['kernel']['machine'] != 'x86_64'
-    Chef::Log.error("Couchbase Server on Windows must be installed on a 64-bit machine")
-  else
-    default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}_#{package_machine}_#{node['couchbase']['server']['version']}.setup.exe"
-  end
+  default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}_#{node['couchbase']['server']['version']}_#{package_machine}.setup.exe"
 else
   Chef::Log.error("Couchbase Server is not supported on #{node['platform_family']}")
 end
