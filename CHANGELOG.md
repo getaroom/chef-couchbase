@@ -1,3 +1,9 @@
+## v1.2.0
+
+- Update to Couchbase 2.2.0.
+- [GH-13] Add 'buckets' recipe to manipulate buckets.
+- [GH-19] Repair Ubuntu package name changes.
+
 ## v1.1.0
 
 - Update to Couchbase 2.0.1.
