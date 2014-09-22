@@ -31,6 +31,7 @@ couchbase-server
 * `node['couchbase']['server']['package_base_url']` - The url path to download the couchbase-server package file from
 * `node['couchbase']['server']['package_full_url']` - The full url to the couchbase-server package file to download and install
 * `node['couchbase']['server']['database_path']`    - The directory Couchbase should persist data to
+* `node['couchbase']['server']['index_path']`       - The directory Couchbase should write indexes to
 * `node['couchbase']['server']['log_dir']`          - The directory Couchbase should log to
 * `node['couchbase']['server']['memory_quota_mb']`  - The per server RAM quota for the entire cluster in megabytes
                                                       defaults to Couchbase's maximum allowed value
