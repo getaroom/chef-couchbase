@@ -53,7 +53,7 @@ describe_recipe "couchbase::server" do
     end
   end
 
-  describe "indexe directory" do
+  describe "index directory" do
     let(:index_dir) { directory node['couchbase']['server']['index_path'] }
 
     it "exists" do
