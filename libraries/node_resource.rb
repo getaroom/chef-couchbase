@@ -14,6 +14,10 @@ class Chef
         set_or_return(:database_path, arg, :kind_of => String, :default => "/opt/couchbase/var/lib/couchbase/data")
       end
 
+      def index_path(arg=nil)
+        set_or_return(:index_path, arg, :kind_of => String, :default => "/opt/couchbase/var/lib/couchbase/data")
+      end
+
       def initialize(*)
         super
         @action = :modify

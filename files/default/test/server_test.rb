@@ -53,6 +53,19 @@ describe_recipe "couchbase::server" do
     end
   end
 
+  describe "index directory" do
+    let(:index_dir) { directory node['couchbase']['server']['index_path'] }
+
+    it "exists" do
+      index_dir.must_exist
+    end
+
+    it "is owned by couchbase" do
+      index_dir.with :owner, "couchbase"
+      index_dir.with :group, "couchbase"
+    end
+  end
+
   describe "self Couchbase node" do
     let(:node_self) do
       couchbase_node("self", {
@@ -63,6 +76,10 @@ describe_recipe "couchbase::server" do
 
     it "has its database path configured" do
       node_self.must_have :database_path, node["couchbase"]["server"]["database_path"]
+    end
+
+    it "has its index path configured" do
+      node_self.must_have :index_path, node["couchbase"]["server"]["index_path"]
     end
   end
 

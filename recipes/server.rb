@@ -118,6 +118,13 @@ directory node['couchbase']['server']['database_path'] do
   recursive true
 end
 
+directory node['couchbase']['server']['index_path'] do
+  owner "couchbase"
+  group "couchbase"
+  mode 0755
+  recursive true
+end
+
 service "couchbase-server" do
   supports :restart => true, :status => true
   action [:enable, :start]
@@ -126,6 +133,13 @@ end
 
 couchbase_node "self" do
   database_path node['couchbase']['server']['database_path']
+
+  username node['couchbase']['server']['username']
+  password node['couchbase']['server']['password']
+end
+
+couchbase_node "self" do
+  index_path node['couchbase']['server']['index_path']
 
   username node['couchbase']['server']['username']
   password node['couchbase']['server']['password']
