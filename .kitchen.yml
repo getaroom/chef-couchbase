@@ -6,20 +6,11 @@ driver_config:
     memory: 1024
 
 platforms:
-- name: ubuntu-13.04
-  run_list:
-  - recipe[apt]
-
 - name: ubuntu-12.04
   run_list:
   - recipe[apt]
 
-- name: ubuntu-10.04
-  run_list:
-  - recipe[apt]
-
 - name: centos-6.5
-- name: centos-5.10
 
 suites:
 - name: server-community
