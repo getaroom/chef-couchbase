@@ -42,7 +42,7 @@ describe Chef::Provider::CouchbaseCluster do
       end
 
       it "populates exists with true" do
-        current_resource.exists.should be_true
+        current_resource.exists.should be true
       end
     end
 
@@ -64,7 +64,7 @@ describe Chef::Provider::CouchbaseCluster do
       end
 
       it "populates exists with false" do
-        current_resource.exists.should be_false
+        current_resource.exists.should be false
       end
     end
   end

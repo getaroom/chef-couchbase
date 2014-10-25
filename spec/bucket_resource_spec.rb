@@ -148,7 +148,7 @@ describe Chef::Resource::CouchbaseBucket do
 
     it "can be assigned false" do
       resource.replicas false
-      resource.replicas.should be_false
+      resource.replicas.should be false
     end
 
     it "cannot be assigned a negative number" do
