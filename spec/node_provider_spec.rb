@@ -7,6 +7,7 @@ describe Chef::Provider::CouchbaseNode do
   let(:base_uri) { "#{new_resource.username}:#{new_resource.password}@localhost:8091" }
   let(:id) { "self" }
   let(:new_database_path) { "/opt/couchbase/var/lib/couchbase/data" }
+  let(:new_index_path) { "/opt/couchbase/var/lib/couchbase/data" }
 
   let :new_resource do
     double({
@@ -15,6 +16,7 @@ describe Chef::Provider::CouchbaseNode do
       :username => "Administrator",
       :password => "password",
       :database_path => new_database_path,
+      :index_path => new_index_path,
       :updated_by_last_action => nil,
     })
   end
@@ -92,6 +94,7 @@ describe Chef::Provider::CouchbaseNode do
             :name => "my node",
             :id => id,
             :database_path => "/opt/couchbase/var/lib/couchbase/data",
+            :index_path => "/opt/couchbase/var/lib/couchbase/data",
           })
         end
 
@@ -134,6 +137,7 @@ describe Chef::Provider::CouchbaseNode do
           :name => "my node",
           :id => "self",
           :database_path => "/opt/couchbase/var/lib/couchbase/data",
+          :index_path => "/opt/couchbase/var/lib/couchbase/data",
         })
       end
 
@@ -142,6 +146,7 @@ describe Chef::Provider::CouchbaseNode do
           :name => "my node",
           :id => "self",
           :database_path => "/opt/couchbase/var/lib/couchbase/data",
+          :index_path => "/opt/couchbase/var/lib/couchbase/data",
         })
       end
 
