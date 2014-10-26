@@ -53,6 +53,7 @@ suites:
   - recipe[minitest-handler]
   - recipe[couchbase::moxi]
   attributes: {}
+  excludes: ["windows-2012R2"]
 
 - name: client
   run_list:
