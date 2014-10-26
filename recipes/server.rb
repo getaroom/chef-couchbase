@@ -133,12 +133,6 @@ end
 
 couchbase_node "self" do
   database_path node['couchbase']['server']['database_path']
-
-  username node['couchbase']['server']['username']
-  password node['couchbase']['server']['password']
-end
-
-couchbase_node "self" do
   index_path node['couchbase']['server']['index_path']
 
   username node['couchbase']['server']['username']
