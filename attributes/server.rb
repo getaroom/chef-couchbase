@@ -26,7 +26,7 @@ case node['platform']
 when "debian"
   package_machine = node['kernel']['machine'] == "x86_64" ? "amd64" : "x86"
   default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}_#{node['couchbase']['server']['version']}-debian7_#{package_machine}.deb"
-when "redhat", "centos"
+when "centos", "redhat", "amazon", "scientific"
   package_machine = node['kernel']['machine'] == "x86_64" ? "x86_64" : "x86"
   default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}-#{node['couchbase']['server']['version']}-centos6.#{package_machine}.rpm"
 when "ubuntu"
