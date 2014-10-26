@@ -6,6 +6,10 @@ driver_config:
     memory: 1024
 
 platforms:
+- name: debian-7.6
+  run_list:
+  - recipe[apt]
+
 - name: ubuntu-12.04
   run_list:
   - recipe[apt]
