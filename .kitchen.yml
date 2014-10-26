@@ -5,6 +5,9 @@ driver_config:
   customize:
     memory: 1024
 
+provisioner:
+  name: chef_zero
+
 platforms:
 - name: debian-7.6
   run_list:
@@ -15,6 +18,14 @@ platforms:
   - recipe[apt]
 
 - name: centos-6.5
+
+- name: windows-2012R2
+  transport:
+    name: winrm
+  driver_config:
+    box: win2012r2-datacenter-chef11.16.2
+    vm_hostname: couchbase
+    require_chef_omnibus: false
 
 suites:
 - name: server-community
