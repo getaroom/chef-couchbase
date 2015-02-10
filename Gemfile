@@ -1,12 +1,12 @@
 source "https://rubygems.org"
 
 gem "activesupport"
-gem "chef", "< 11.0"
+gem "chef", "~> 10.34"
 gem "foodcritic", "!= 1.4.0" # https://github.com/acrmp/foodcritic/issues/37
 gem "knife-ec2"
 gem "minitest-chef-handler"
 gem "rake"
-gem "rspec"
+gem "rspec", "< 3.0.0"
 gem "spiceweasel"
 gem "webmock"
 
