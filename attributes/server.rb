@@ -22,16 +22,27 @@
 default['couchbase']['server']['edition'] = "community"
 default['couchbase']['server']['version'] = "3.0.0"
 
+package_machine = node['kernel']['machine'] == "x86_64" ? "amd64" : "x86"
+
 case node['platform']
 when "debian"
-  package_machine = node['kernel']['machine'] == "x86_64" ? "amd64" : "x86"
-  default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}_#{node['couchbase']['server']['version']}-debian7_#{package_machine}.deb"
+  if node['couchbase']['server']['version'] <= "3.0.0"
+    Chef::Log.error("Couchbase Server does not have a Debian release for #{node['couchbase']['server']['version']}")
+  else
+    default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}_#{node['couchbase']['server']['version']}-debian7_#{package_machine}.deb"
+  end
 when "centos", "redhat", "amazon", "scientific"
-  package_machine = node['kernel']['machine'] == "x86_64" ? "x86_64" : "x86"
-  default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}-#{node['couchbase']['server']['version']}-centos6.#{package_machine}.rpm"
+  if node['couchbase']['server']['version'] <= "3.0.0"
+    default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}_#{node['couchbase']['server']['version']}_#{package_machine}.rpm"
+  else
+    default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}-#{node['couchbase']['server']['version']}-centos6.#{package_machine}.rpm"
+  end
 when "ubuntu"
-  package_machine = node['kernel']['machine'] == "x86_64" ? "amd64" : "x86"
-  default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}_#{node['couchbase']['server']['version']}-ubuntu12.04_#{package_machine}.deb"
+  if node['couchbase']['server']['version'] <= "3.0.0"
+    default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}_#{node['couchbase']['server']['version']}_#{package_machine}.deb"
+  else
+    default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}_#{node['couchbase']['server']['version']}-ubuntu12.04_#{package_machine}.deb"
+  end
 when "windows"
   if node['kernel']['machine'] != 'x86_64'
     Chef::Log.error("Couchbase Server on Windows must be installed on a 64-bit machine")
