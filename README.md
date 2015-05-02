@@ -5,6 +5,13 @@ Installs and configures Couchbase.
 
 [![Build Status](https://travis-ci.org/urbandecoder/couchbase.png)](https://travis-ci.org/urbandecoder/couchbase)
 
+Adopt Me!
+=========
+
+**This cookbook is up for adoption.** Ever since I started working at Chef Software, Inc. I have not had
+the need to use Couchbase. Therefore I find it difficult to keep up with the issues & PRs being filed on
+this cookbook. If you can help, or become a co-maintainer, please contact me: jdunn@chef.io
+
 Requirements
 ============
 
