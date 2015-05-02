@@ -1,3 +1,9 @@
+## v1.3.1 (2015-05-01)
+
+- Remove resource cloning.
+- Fix package version naming, etc. for current releases.
+- [GH-43] Bugfix: URI encode the server path. 
+
 ## v1.3.0 (2014-10-25)
 
 - Update to Couchbase 3.0.0.
