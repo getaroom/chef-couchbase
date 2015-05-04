@@ -22,22 +22,23 @@
 default['couchbase']['server']['edition'] = "community"
 default['couchbase']['server']['version'] = "3.0.0"
 
-package_machine = node['kernel']['machine'] == "x86_64" ? "amd64" : "x86"
-
 case node['platform']
 when "debian"
+  package_machine = node['kernel']['machine'] == "x86_64" ? "amd64" : "x86"
   if node['couchbase']['server']['version'] <= "3.0.0"
     Chef::Log.error("Couchbase Server does not have a Debian release for #{node['couchbase']['server']['version']}")
   else
     default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}_#{node['couchbase']['server']['version']}-debian7_#{package_machine}.deb"
   end
 when "centos", "redhat", "amazon", "scientific"
+  package_machine = node['kernel']['machine'] == "x86_64" ? "x86_64" : "x86"
   if node['couchbase']['server']['version'] <= "3.0.0"
     default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}_#{node['couchbase']['server']['version']}_#{package_machine}.rpm"
   else
     default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}-#{node['couchbase']['server']['version']}-centos6.#{package_machine}.rpm"
   end
 when "ubuntu"
+  package_machine = node['kernel']['machine'] == "x86_64" ? "amd64" : "x86"
   if node['couchbase']['server']['version'] <= "3.0.0"
     default['couchbase']['server']['package_file'] = "couchbase-server-#{node['couchbase']['server']['edition']}_#{node['couchbase']['server']['version']}_#{package_machine}.deb"
   else
