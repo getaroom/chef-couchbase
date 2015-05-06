@@ -52,7 +52,9 @@ end
 case node['platform']
 when "debian", "ubuntu"
   package "libssl1.0.0"
-  dpkg_package File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file'])
+  dpkg_package File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file']) do
+    notifies :run, "ruby_block[block_until_operational]", :immediately
+  end
 when "redhat", "centos", "scientific", "amazon", "fedora"
   yum_package File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file']) do
     options node['couchbase']['server']['allow_unsigned_packages'] == true ? "--nogpgcheck" : ""
