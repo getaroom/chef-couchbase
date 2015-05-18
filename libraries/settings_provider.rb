@@ -10,8 +10,6 @@ class Chef
         @current_resource = Resource::CouchbaseSettings.new @new_resource.name
         @current_resource.group @new_resource.group
         @current_resource.settings settings_data
-
-
       end
 
       def action_modify
