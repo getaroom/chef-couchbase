@@ -10,6 +10,8 @@ class Chef
         @current_resource = Resource::CouchbaseSettings.new @new_resource.name
         @current_resource.group @new_resource.group
         @current_resource.settings settings_data
+
+
       end
 
       def action_modify
@@ -23,7 +25,9 @@ class Chef
       private
 
       def settings_match?
-        @new_resource.settings.all? { |key, value| @current_resource.settings[key.to_s] == value }
+        # By comparing what is new against what is current, since password is not returned as part of
+        # current, we avoid resetting the password continuiously, which logs users out of the GUI
+        @current_resource.settings.all? { |key, value| @new_resource.settings[key.to_s] == value }
       end
 
       def settings_data
