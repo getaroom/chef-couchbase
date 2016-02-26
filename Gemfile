@@ -2,11 +2,11 @@ source "https://rubygems.org"
 
 gem "activesupport"
 gem "chef", "~> 10.34"
-gem "foodcritic", "!= 1.4.0" # https://github.com/acrmp/foodcritic/issues/37
+gem "foodcritic", "!= 1.4.0", "< 5.0.0" # 5+ requires Ruby 2.0.0, https://github.com/acrmp/foodcritic/issues/37
 gem "knife-ec2"
 gem "minitest-chef-handler"
 gem "rake"
-gem "rspec", "< 3.0.0"
+gem "rspec", "~> 2.0"
 gem "spiceweasel"
 gem "webmock"
 
