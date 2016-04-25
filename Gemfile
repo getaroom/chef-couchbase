@@ -16,5 +16,5 @@ group :development do
   gem "guard-bundler"
   gem "guard-foodcritic"
   gem "guard-rspec"
-  gem "rb-fsevent"
+  gem "listen", "~> 3.0.6" # indirect dependency, 3.1 depends on Ruby ~> 2.2
 end
