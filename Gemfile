@@ -8,7 +8,7 @@ gem "minitest-chef-handler"
 gem "rake"
 gem "rspec", "~> 2.0"
 gem "spiceweasel"
-gem "webmock", "< 1.24.3" # https://github.com/bblimke/webmock/issues/607 https://github.com/rubygems/rubygems/commit/da4362a6644ca5a75c210677ac500bccfe75f529
+gem "webmock", ">= 1.24.6", "< 2.0"
 
 group :development do
   gem "growl"
