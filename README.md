@@ -6,10 +6,16 @@ Installs and configures Couchbase.
 REQUIREMENTS
 ============
 
-Platform
---------
+Chef 0.10.10 and Ohai 0.6.12 are required due to the use of platform_family.
 
-Tested on Ubuntu 12.04.
+Platforms
+---------
+
+* Debian family (Debian, Ubuntu etc)
+* Red Hat family (Redhat, CentOS, Oracle etc)
+* Microsoft Windows
+
+Note that Couchbase Server does not support Windows 8 or Server 2012: see http://www.couchbase.com/issues/browse/MB-7016.
 
 ATTRIBUTES
 ==========
@@ -17,29 +23,32 @@ ATTRIBUTES
 couchbase-server
 ----------------
 
-* `node['couchbase']['server']['edition']`         - The edition of couchbase-server to install, "community" or "enterprise"
-* `node['couchbase']['server']['version']`         - The version of couchbase-server to install
-* `node['couchbase']['server']['package_file]`     - The couchbase-server package file to download and install
-* `node['couchbase']['server']['package_base_url]` - The url path to download the couchbase-server package file from
-* `node['couchbase']['server']['package_full_url]` - The full url to the couchbase-server package file to download and install
-* `node['couchbase']['server']['database_path']`   - The directory Couchbase should persist data to
-* `node['couchbase']['server']['log_dir']`         - The directory Couchbase should log to
-* `node['couchbase']['server']['memory_quota_mb']` - The per server RAM quota for the entire cluster in megabytes
-                                                     defaults to Couchbase's maximum allowed value
-* `node['couchbase']['server']['username']`        - The cluster's username for the REST API and Admin UI
-* `node['couchbase']['server']['password']`        - The cluster's password for the REST API and Admin UI
+* `node['couchbase']['server']['edition']`          - The edition of couchbase-server to install, "community" or "enterprise"
+* `node['couchbase']['server']['version']`          - The version of couchbase-server to install
+* `node['couchbase']['server']['package_file']`     - The couchbase-server package file to download and install
+* `node['couchbase']['server']['package_base_url']` - The url path to download the couchbase-server package file from
+* `node['couchbase']['server']['package_full_url']` - The full url to the couchbase-server package file to download and install
+* `node['couchbase']['server']['database_path']`    - The directory Couchbase should persist data to
+* `node['couchbase']['server']['log_dir']`          - The directory Couchbase should log to
+* `node['couchbase']['server']['memory_quota_mb']`  - The per server RAM quota for the entire cluster in megabytes
+                                                      defaults to Couchbase's maximum allowed value
+* `node['couchbase']['server']['username']`         - The cluster's username for the REST API and Admin UI
+* `node['couchbase']['server']['password']`         - The cluster's password for the REST API and Admin UI
 
-libcouchbase
-------------
+client
+------
 
-* `node['couchbase']['libcouchbase']['version']`         - The version of libcouchbase to install
-* `node['couchbase']['libcouchbase']['package_base_url]` - The url path to download the libcouchbase packages files from
+* `node['couchbase']['client']['version']`          - The version of libcouchbase to install
 
-libvbucket
-----------
+moxi
+----
 
-* `node['couchbase']['libvbucket']['version']`         - The version of libvbucket to install
-* `node['couchbase']['libvbucket']['package_base_url]` - The url path to download the libvbucket packages files from
+* `node['couchbase']['moxi']['version']`            - The version of moxi to install
+* `node['couchbase']['moxi']['package_file']`       - The package file to download
+* `node['couchbase']['moxi']['package_base_url']`   - The base URL where the packages are located 
+* `node['couchbase']['moxi']['package_full_url']`   - The full URL to the moxi package
+* `node['couchbase']['moxi']['cluster_server']`     - The bootstrap server for moxi to contact for the node list
+* `node['couchbase']['moxi']['cluster_rest_url']`   - The bootstrap server's full REST URL for retrieving the initial node list
 
 RECIPES
 =======
@@ -47,12 +56,17 @@ RECIPES
 client
 ------
 
-Installs the libvbucket and libcouchbase packages.
+Installs the libcouchbase2 and devel packages.
 
 server
 ------
 
 Installs the couchbase-server package and starts the couchbase-server service.
+
+moxi
+----
+
+Installs the moxi-server package and starts the moxi-server service.
 
 RESOURCES/PROVIDERS
 ===================
@@ -177,6 +191,7 @@ LICENSE AND AUTHOR
 
 Author:: Chris Griego (<cgriego@getaroom.com>)
 Author:: Morgan Nelson (<mnelson@getaroom.com>)
+Author:: Julian Dunn (<jdunn@aquezada.com>)
 
 Copyright 2012, getaroom
 
