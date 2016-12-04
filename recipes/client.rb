@@ -24,7 +24,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-package_machine = node['kernel']['machine'] == "i386" ? "i386" : "amd64"
+package_machine = node['kernel']['machine'] == "i686" ? "i386" : "amd64"
 
 %w(libvbucket libcouchbase).each do |lib|
   %w(1 -dev).each do |package_suffix|
