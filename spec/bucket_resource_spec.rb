@@ -192,4 +192,27 @@ describe Chef::Resource::CouchbaseBucket do
       expect { resource.type "memcache" }.to raise_error Chef::Exceptions::ValidationFailed, "Option type's value memcache must be either couchbase or memcached!"
     end
   end
+
+  describe "#auth_type" do
+    it "can be none" do
+      resource.auth_type "none"
+      resource.auth_type.should == "none"
+    end
+
+    it "can not be random" do
+      expect { 
+        resource.auth_type "random" 
+      }.to raise_error Chef::Exceptions::ValidationFailed
+    end
+
+    it "defaults to sasl" do
+      resource.auth_type.should == "sasl"
+    end
+  end
+
+  describe "#proxy_port" do
+    it "defaults to 11212" do
+      resource.proxy_port.should == 11212
+    end
+  end
 end

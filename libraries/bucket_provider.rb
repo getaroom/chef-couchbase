@@ -14,6 +14,8 @@ class Chef
         @current_resource.cluster @new_resource.cluster
         @current_resource.exists !!bucket_data
 
+        @current_resource.auth_type @new_resource.auth_type
+        @current_resource.proxy_port @new_resource.proxy_port
         if @current_resource.exists
           @current_resource.type bucket_type
           @current_resource.memory_quota_mb bucket_memory_quota_mb
@@ -45,7 +47,8 @@ class Chef
 
       def create_params
         {
-          "authType" => "sasl",
+          "authType" => new_resource.auth_type,
+          "proxyPort" => new_resource.proxy_port,
           "saslPassword" => "",
           "bucketType" => new_api_type,
           "name" => new_resource.bucket,
